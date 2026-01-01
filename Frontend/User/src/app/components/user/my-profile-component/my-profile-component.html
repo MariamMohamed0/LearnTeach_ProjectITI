@@ -1,0 +1,468 @@
+<div [ngClass]="{
+        'fixed top-0 left-0 z-50 h-screen transition-transform duration-300': true,
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+        'translate-x-0': isSidebarOpen
+      }" [style.width.px]="isSidebarOpen ? 240 : 56" class="bg-white dark:bg-gray-800 shadow-lg">
+    <app-sidestudent [collapsed]="!isSidebarOpen"></app-sidestudent>
+</div>
+
+<section class="myprofile">
+
+    <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+    <main [ngStyle]="{'margin-left.px': isSidebarOpen && !isMobile() ? 240 : 56}"
+          class="flex flex-col transition-all duration-300 overflow-auto min-h-screen">
+
+        <app-user-header [isDarkMode]="isDarkMode" 
+                         (toggleSidebarEvent)="toggleSidebar()"
+                         (toggleDarkModeEvent)="toggleDarkMode()">
+        </app-user-header>
+
+        <div class="p-4">
+
+            <div *ngIf="loading" class="loading text-center text-lg font-semibold">{{tr('Loading...')}}</div>
+
+            <div *ngIf="!loading && profile" class="space-y-6 mt-6 ml-3 mr-3">
+                <div class="card bg-card border border-border rounded-lg p-6 shadow-card flex flex-col md:flex-row items-center md:items-start gap-6 w-full">
+<div class="relative flex-shrink-0">
+  <span class="relative flex overflow-hidden rounded-full h-32 w-32 ring-4 ring-primary/20">
+    <ng-container *ngIf="profile?.profilePic; else initials">
+      <img 
+        [src]="profile.profilePic" 
+        alt="Profile Pic" 
+        class="img h-full w-full object-cover rounded-full"
+      />
+    </ng-container>
+
+    <ng-template #initials>
+      <div class="h-32 w-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-5xl">
+        {{ profile?.fname?.charAt(0)?.toUpperCase() || '?' }}
+      </div>
+    </ng-template>
+  </span>
+
+
+  <label class="absolute bottom-0 right-0 flex items-center justify-center bg-white rounded-full p-2 shadow-lg cursor-pointer">
+    <i class="fa-solid fa-camera text-blue-500 text-xl"></i>
+    <input type="file" (change)="onFileSelected($event); uploadProfilePicture()" class="hidden" />
+  </label>
+</div>
+
+    <div class="flex-1 min-w-0">
+        <div class="flex justify-between items-center mb-2">
+           <h1 class="text-3xl font-bold truncate">{{ profile?.fname }} {{ profile?.lname }}</h1>
+
+        </div>
+        <p class="text-muted-foreground mb-4 truncate">
+            {{ updateData.experienceText || profile.experienceText || 'Lorem ipsum dolor sit amet.' }}
+        </p>
+        <div>
+            <img [src]="myBadgeUrl" alt="{{myBadge}}" class="h-8 w-8 rounded-full border-2 border-yellow-400 shadow-sm">
+            <span class="text-yellow-500 font-bold text-lg drop-shadow-md">{{ myRating }}/5</span>
+        </div>
+    </div>
+    <div class="flex flex-col gap-2 flex-shrink-0">
+        <button class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2" routerLink="/settings">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pen h-4 w-4 mr-2">
+                <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
+            </svg>
+            {{tr('Edit Profile')}}
+        </button>
+        <div class="bg-gradient-to-r from-diamond/20 to-diamond/10 px-4 py-2 rounded-lg text-center border border-diamond/30">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gem h-5 w-5 text-diamond mx-auto mb-1">
+                <path d="M6 3h12l4 6-10 13L2 9Z"></path>
+                <path d="M11 3 8 9l4 13 4-13-3-6"></path>
+                <path d="M2 9h20"></path>
+            </svg>
+            <p class="font-bold">{{ userPoints }}</p>
+            <p class="text-xs text-muted-foreground">{{tr('Diamonds')}}</p>
+        </div>
+        
+<!-- Maysoon new start -->
+            <div class="mt-2">
+              <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full font-semibold text-white" [ngClass]="{
+         'bg-green-500': nationalIdStatus === 'Approved',
+         'bg-red-500': nationalIdStatus !== 'Approved'
+       }">
+
+                <!-- Icon in circle -->
+                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-white text-current">
+                  <svg *ngIf="nationalIdStatus === 'Approved'" xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <svg *ngIf="nationalIdStatus !== 'Approved'" xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </div>
+
+                <!-- Text -->
+                <span class="text-sm">
+                  {{ nationalIdStatus === 'Approved' ? 'Approved' : 'Not Approved' }}
+                </span>
+              </div>
+            </div>
+     
+    </div>
+
+</div>
+
+
+                <!-- Skills Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 dark:bg-gray-800">
+                    <div class="flex flex-col gap-6 h-full">
+                        <div class="card bg-card border border-border rounded-lg shadow-elevated flex-1">
+                            <h3 class="text-3xl font-bold dark:text-[var(--primary)]">{{tr('Skills')}}</h3>
+                            <div *ngIf="(skills ?? []).length > 0; else noSkills">
+                                <div *ngFor="let skill of skills" class="space-y-1 mb-4">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-medium text-2xl">{{ skill.name }}</span>
+                                        <div class="flex gap-1 mt-0">
+                                            <ng-container *ngFor="let star of getStarsArray(skill.goodAtIt)">
+                                                <fa-icon [icon]="faStar" [ngClass]="{
+                                                    'text-yellow-400': star === 'full',
+                                                    'text-gray-300': star === 'empty'
+                                                }"></fa-icon>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-template #noSkills>
+                                <p class="text-muted-foreground">{{tr('No skills yet.')}}</p>
+                            </ng-template>
+                        </div>
+
+                        <!-- Social Media Section -->
+                        <div class="card bg-card border border-border rounded-lg shadow-card flex-1">
+                            <h3 class="text-2xl font-bold dark:text-[var(--primary)]">{{tr('Social Media')}}</h3>
+                            <div *ngIf="socialMedia; else noSocialMedia" class="space-y-2 flex justify-around items-center">
+                                <div *ngIf="socialMedia.facebookLink">
+                                    <a [href]="socialMedia.facebookLink" target="_blank" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-3 border border-border rounded-lg hover:text-blue-900 hover:border-primary transition-colors">
+                                        <i class="text-2xl fa-brands fa-facebook"></i>{{tr('Facebook')}}
+                                    </a>
+                                </div>
+                                <div *ngIf="socialMedia.linkedin">
+                                    <a [href]="socialMedia.linkedin" target="_blank" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-3 border border-border rounded-lg hover:text-blue-900 hover:border-primary transition-colors">
+                                        <i class="text-2xl fa-brands fa-linkedin"></i>{{tr('LinkedIn')}}
+                                    </a>
+                                </div>
+                                <div *ngIf="socialMedia.personalWebsite">
+                                    <a [href]="socialMedia.personalWebsite" target="_blank" class="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-3 border border-border rounded-lg hover:text-blue-900 hover:border-primary transition-colors">
+                                        <i class="text-2xl fa-solid fa-earth-americas"></i>{{tr('Website')}}
+                                    </a>
+                                </div>
+                            </div>
+                            <ng-template #noSocialMedia>
+                                <p class="text-muted-foreground">{{tr('No social media links yet.')}}</p>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <!-- Certificates Section -->
+                    <div class="card bg-card border border-border rounded-lg shadow-card flex-1">
+                        <h3 class="text-3xl font-bold dark:text-[var(--primary)]">{{tr('Certificates')}}</h3>
+                        <div class="p-3">
+                            <div *ngIf="certificates.length > 0; else noCertificates" class="space-y-3">
+                                <div *ngFor="let cer of certificates" class="p-4 border border-border rounded-lg flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-semibold text-2xl mb-2">{{ cer.cername }}</h4>
+                                        <p class="text-xl text-muted-foreground">{{ cer.instatutionName }}</p>
+                                        <p class="text-muted-foreground mt-1 text-lg">Earned: {{ cer.earnedYear || 'N/A' }}</p>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <a *ngIf="cer.cerpic" [href]="cer.cerpic" target="_blank">
+                                            <img [src]="cer.cerpic" alt="Certificate Image" class="w-20 h-20 rounded-lg border border-border shadow" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-template #noCertificates>
+                                <p class="text-muted-foreground p-3">{{tr('No certificates yet.')}}</p>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Section -->
+                <div class="card bg-card border border-border rounded-lg shadow-card flex-1 w-full mt-6">
+                    <h3 class="text-3xl font-bold dark:text-[var(--primary)]">{{tr('Projects')}}</h3>
+                    <div class="p-3">
+                        <div *ngIf="projects.length > 0; else noProjects" class="space-y-3">
+                            <div *ngFor="let proj of projects" class="p-4 border border-border rounded-lg flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-2xl mb-2">{{proj.projectName}}</h4>
+                                    <p class="text-xl text-muted-foreground">{{proj.projectDesc}}</p>
+                                </div>
+                                <div>
+                                    <a [href]="proj.repolink" target="_blank" class="text-primary text-xl hover:underline">
+                                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #noProjects>
+                            <p class="text-muted-foreground">{{tr('No projects yet.')}}</p>
+                        </ng-template>
+                    </div>
+                </div>
+<!-- Feedbacks Section -->
+<div class="card bg-card border border-border rounded-lg shadow-card mt-6 p-4">
+  <h3 class="text-2xl font-bold mb-4 dark:text-[var(--primary)]">{{tr('Feedbacks')}}</h3>
+
+  <div *ngIf="feedbacks.length > 0; else noFeedbacks" class="space-y-4">
+    <div *ngFor="let fb of feedbacks" class="border border-border rounded-lg p-4 shadow-sm bg-white dark:bg-gray-700">
+
+      <div class="flex items-center gap-3 mb-2">
+        <div class="h-12 w-12 rounded-full overflow-hidden border-2 border-gray-200">
+          <img *ngIf="fb.ratedByUser?.profilePic; else initials" [src]="fb.ratedByUser?.profilePic" alt="User Pic" class="h-full w-full object-cover" />
+          <ng-template #initials>
+            <div class="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+              {{ fb.ratedByUserName?.charAt(0)?.toUpperCase() || '?' }}
+            </div>
+          </ng-template>
+        </div>
+
+        <div>
+          <p class="font-semibold text-lg text-gray-900 dark:text-white">
+            {{ fb.ratedByUserName || (fb.ratedByUser?.fname + ' ' + fb.ratedByUser?.lname) }}
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-300">
+            Session: {{ fb.sessionName || 'N/A' }}
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-300">
+            {{ fb.createdAt | date:'mediumDate' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- النجوم -->
+      <div class="flex items-center gap-2 mb-2">
+        <ng-container *ngFor="let star of getStarsArray(fb.ratingValue)">
+          <fa-icon [icon]="faStar" [ngClass]="{
+            'text-yellow-400': star === 'full',
+            'text-gray-300': star === 'empty'
+          }"></fa-icon>
+        </ng-container>
+      </div>
+
+      <!-- تعليق الفيدباك -->
+      <p class="text-gray-800 dark:text-gray-100">{{ fb.comment }}</p>
+    </div>
+  </div>
+
+  <ng-template #noFeedbacks>
+    <p class="text-gray-500 dark:text-gray-300 text-center py-6">{{tr('No feedbacks received yet.')}}</p>
+  </ng-template>
+</div>
+
+
+
+                <!-- Posts Section -->
+<!-- Posts Section -->
+<div class="card bg-card mt-6 ml-3 mr-3 min-h-screen bg-gray-100 p-4 md:p-6">
+  <h3 class="text-2xl font-bold mb-4 dark:text-[var(--primary)]">{{tr('My Posts')}}</h3>
+
+  <div *ngIf="loading" class="flex justify-center items-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <span class="ml-3 text-gray-600">{{tr('Loading posts...')}}</span>
+  </div>
+
+  <div *ngIf="!loading && postsWithState.length > 0" class="space-y-6">
+    <div *ngFor="let post of postsWithState" class="rounded-lg border shadow-md hover:shadow-lg transition p-6 relative bg-white dark:bg-gray-800">
+
+      <!-- Header -->
+      <div class="flex items-center gap-4 mb-4">
+        <div *ngIf="profile?.profilePic; else initials" class="h-12 w-12 rounded-full overflow-hidden border-2 border-gray-200">
+          <img [src]="profile?.profilePic" alt="User profile" class="h-full w-full object-cover" />
+        </div>
+        <ng-template #initials>
+          <div class="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg border-2 border-gray-200">
+            {{ profile?.fname?.charAt(0)?.toUpperCase() || '?' }}
+          </div>
+        </ng-template>
+        <div class="flex-1">
+          <h3 class="font-semibold text-gray-900 text-lg">{{ profile?.fname || 'Unknown' }} {{ profile?.lname || '' }}</h3>
+          <p class="text-sm text-gray-500">{{ post.createdAt | date:'mediumDate' }} at {{ post.createdAt | date:'shortTime' }}</p>
+        </div>
+        <div *ngIf="post.skillName" class="inline-flex items-center px-2.5 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
+          {{ post.skillName }}
+        </div>
+
+        <!-- Button + Dropdown Wrapper -->
+        <div *ngIf="post.user?.userId === currentUserId" class="relative inline-block text-left">
+          <!-- Toggle Button -->
+          <button (click)="toggleDropdown(post)"
+                  class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+              <circle cx="12" cy="5" r="1"></circle>
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="12" cy="19" r="1"></circle>
+            </svg>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div *ngIf="post.dropdownOpen" 
+               class="absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50">
+            <button (click)="openEditModal(post); toggleDropdown(post)"
+                    class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+              Edit
+            </button>
+            <button (click)="deletePost(post); toggleDropdown(post)"
+                    class="w-full text-left px-4 py-2 text-sm hover:bg-red-100 dark:hover:bg-red-900 text-red-600 dark:text-red-400 flex items-center gap-2">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post Content -->
+      <div class="mb-4">
+        <div *ngIf="editingPostId === post.postId">
+          <textarea [(ngModel)]="updatedContent" class="w-full p-2 border rounded resize-none" rows="4"></textarea>
+          <div class="flex gap-2 mt-2">
+            <button (click)="savePost(post)" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">{{tr('Save')}}</button>
+            <button (click)="cancelEditing()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition">{{tr('Cancel')}}</button>
+          </div>
+        </div>
+        <p *ngIf="editingPostId !== post.postId" class="text-gray-800">{{ post.content }}</p>
+      </div>
+      <div *ngIf="post?.medias?.length" class="mb-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+    <img *ngFor="let m of post.medias" src="images/photo_5886497488468905056_x.jpg" alt="Post media" 
+         class="w-full h-48 object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow" />
+  </div>
+</div>
+
+      <!-- Post Actions -->
+      <div class="flex gap-4 pt-4">
+        <button (click)="toggleLike(post)" [ngClass]="post.likedByUser
+                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                  : 'border border-input bg-background hover:bg-accent hover:text-accent-foreground'"
+                class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium
+                ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2
+                focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
+                [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background
+                hover:bg-accent hover:text-accent-foreground h-9 px-3 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               class="lucide lucide-thumbs-up h-4 w-4 mr-2">
+            <path d="M7 10v12"></path>
+            <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path>
+          </svg>
+          {{ post.totalLiked ?? 0 }}
+        </button>
+
+        <button [routerLink]="['/posts', post.postId]" class="flex items-center gap-2 text-gray-600 hover:text-blue-500 hover:bg-blue-50 px-4 py-2 rounded-lg transition">
+          {{ post.totalComments || 0 }} <i class="fa-regular fa-comment"></i>
+        </button>
+      </div>
+  <!-- Edit Modal -->
+</div>
+</div>
+
+<div *ngIf="!loading && postsWithState.length === 0" class="text-center py-12 text-gray-500">
+  <p class="text-lg">{{ tr("You haven't posted anything yet") }}</p>
+</div>
+<div *ngIf="isEditModalOpen">
+  <!-- Overlay -->
+  <div (click)="closeEditModal()" class="fixed inset-0 z-40 bg-black/80"></div>
+
+  <!-- Modal Content -->
+  <div
+    role="dialog"
+    class="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 bg-background p-6 rounded-lg shadow-lg"
+  >
+    <!-- Header -->
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="font-semibold tracking-tight text-2xl">Edit Post</h2>
+    </div>
+
+    <!-- Form -->
+    <div class="space-y-5 py-4">
+      <!-- skills -->
+      <div class="space-y-2">
+        <label class="font-medium text-base">Skill</label>
+        <select
+          [(ngModel)]="editSkillId"
+          class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          <option [ngValue]="null">Select Skill</option>
+          <option *ngFor="let s of skills" [ngValue]="s.id">
+            {{ s.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Post Category -->
+      <div class="space-y-2">
+        <label for="edit-category" class="font-medium text-base">Select Category</label>
+        <select
+          [(ngModel)]="editCategoryId"
+          class="w-full border p-2 rounded-md"
+        >
+          <option [ngValue]="null">Select Category</option>
+          <option *ngFor="let c of categories" [ngValue]="c.id">
+            {{ c.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Post Content -->
+      <div class="space-y-2">
+        <label for="edit-content" class="font-medium text-base">Post Content</label>
+        <textarea
+          [(ngModel)]="editContent"
+          id="edit-content"
+          placeholder="Edit your post content here..."
+          rows="10"
+          class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        ></textarea>
+      </div>
+
+      <!-- Attach Media (لو محتاج، بس مش ضروري دلوقتي) -->
+      <!-- <div class="space-y-3">
+        <label class="font-medium text-base">Attach Media</label>
+        <div class="flex items-center gap-3">
+          <label for="edit-file-upload" class="cursor-pointer">
+            <div class="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border-2 border-dashed border-primary/30 hover:border-primary/50 hover:from-primary/20 hover:to-accent/20 transition-all shadow-sm hover:shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload w-5 h-5 text-primary">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" x2="12" y1="3" y2="15"></line>
+              </svg>
+              <span class="font-medium text-sm">Upload Files</span>
+            </div>
+            <input id="edit-file-upload" type="file" multiple accept="image/*,video/*,.pdf,.doc,.docx" class="hidden" />
+          </label>
+          <span class="text-xs text-muted-foreground">Images, Videos, PDF, Word</span>
+        </div>
+      </div> -->
+
+      <!-- Buttons -->
+      <div class="flex gap-3 justify-end pt-4">
+        <button (click)="closeEditModal()" class="inline-flex items-center justify-center gap-2 text-sm font-medium h-11 rounded-md px-8 border border-input bg-background hover:bg-accent hover:text-accent-foreground">Cancel</button>
+        <button (click)="saveEdit()" class="inline-flex items-center justify-center gap-2 text-sm font-medium h-11 rounded-md px-8 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg">Save Changes</button>
+      </div>
+    </div>
+
+    <!-- Close Button -->
+    <button (click)="closeEditModal()" type="button" class="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+      <span class="sr-only">Close</span>
+    </button>
+  </div>
+</div>
+</div>
+
+
+            </div>
+</div>
+    </main>
+</section>

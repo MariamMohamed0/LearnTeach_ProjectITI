@@ -1,0 +1,148 @@
+<div [ngClass]="{
+        'fixed top-0 left-0 z-50 h-screen transition-transform duration-300': true,
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+        'translate-x-0': isSidebarOpen
+      }" [style.width.px]="isSidebarOpen ? 240 : 56" class="bg-white dark:bg-gray-800 shadow-lg">
+    <app-sidestudent [collapsed]="!isSidebarOpen"></app-sidestudent>
+</div>
+
+<section class="myprofile">
+
+    <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+    <main [ngStyle]="{'margin-left.px': isSidebarOpen && !isMobile() ? 240 : 56}"
+          class="flex flex-col transition-all duration-300 overflow-auto min-h-screen">
+
+    <app-user-header 
+  class="fixed top-0 left-0 w-full z-[999]"
+  [isDarkMode]="isDarkMode" 
+  (toggleSidebarEvent)="toggleSidebar()"
+  (toggleDarkModeEvent)="toggleDarkMode()">
+</app-user-header>
+
+
+  <div class="p-4 mt-6">
+
+    <!-- Heading -->
+    <div class="mb-4 ml-4 md:ml-6">
+      <h1 class="text-2xl font-bold text-foreground">{{tr('My Sessions')}}</h1>
+      <p class="text-sm text-gray-500">{{tr('Manage your teaching and learning sessions')}}</p>
+    </div>
+
+    <!-- Filters + Create Button (separate line, Create on far right) -->
+    <div class="flex items-center justify-between mb-6 ml-4 md:ml-6">
+
+      <!-- Filters -->
+      <div role="tablist" aria-orientation="horizontal"
+           class="flex flex-nowrap gap-2 bg-muted p-2 rounded-md text-muted-foreground"
+           tabindex="0" style="outline: none; flex-shrink: 0;">
+        
+        <!-- All Filter -->
+        <button type="button" role="tab"
+                [attr.aria-selected]="filter==='All'"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium transition"
+                [ngClass]="{'bg-background text-foreground shadow-sm': filter==='All', 'text-muted-foreground': filter!=='All'}"
+                (click)="setFilter('All')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          {{tr('All')}}
+        </button>
+
+        <!-- Teaching Filter -->
+        <button type="button" role="tab"
+                [attr.aria-selected]="filter==='Teacher'"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium transition"
+                [ngClass]="{'bg-background text-foreground shadow-sm': filter==='Teacher', 'text-muted-foreground': filter!=='Teacher'}"
+                (click)="setFilter('Teacher')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               class="lucide lucide-graduation-cap h-4 w-4">
+            <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
+            <path d="M22 10v6"></path>
+            <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+          </svg>
+         {{tr('Teaching')}}
+        </button>
+
+        <!-- Learning Filter -->
+        <button type="button" role="tab"
+                [attr.aria-selected]="filter==='Student'"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium transition"
+                [ngClass]="{'bg-background text-foreground shadow-sm': filter==='Student', 'text-muted-foreground': filter!=='Student'}"
+                (click)="setFilter('Student')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               class="lucide lucide-book-open h-4 w-4">
+            <path d="M12 7v14"></path>
+            <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>
+          </svg>
+          {{tr('Learning')}}
+        </button>
+      </div>
+
+      <!-- Create Button on far right -->
+      <div *ngIf="filter==='Teacher'">
+        <button class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition shadow-md"
+                routerLink="/sessions/create">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 4v16m8-8H4"/>
+          </svg>
+          {{tr('Create Session')}}
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Sessions List -->
+    <div class="flex flex-col gap-4 ml-4 md:ml-6">
+      <!-- <app-session-card
+        *ngFor="let s of sessions"
+        [session]="s"
+        [currentFilter]="filter"
+        (joinEvent)="onJoin($event)"
+        (editEvent)="onEdit($event)"
+        (deleteEvent)="onDelete($event)">
+      </app-session-card> -->
+
+      <app-session-card
+  *ngFor="let s of sessions"
+  [session]="s"
+  [currentFilter]="filter"
+  (joinEvent)="onJoin($event)"
+  (editEvent)="onEdit($event)"
+  (deleteEvent)="onDelete($event)">
+</app-session-card>
+
+    </div>
+
+    <!-- Pagination -->
+<div class="flex justify-center items-center gap-2 mt-6">
+
+  <button (click)="prevPage()"
+          [disabled]="pageNumber === 1"
+          class="px-4 py-2 rounded-lg border bg-white hover:bg-gray-100 disabled:opacity-40 dark:text-white">
+    {{tr('Previous')}}
+  </button>
+
+<ng-container *ngFor="let page of pagesArray; let i = index">
+  <button (click)="goToPage(i+1)"
+          [class.bg-blue-600]="pageNumber === (i+1)"
+          [class.text-white]="pageNumber === (i+1)"
+          class="px-3 py-1 rounded-md border hover:bg-gray-100">
+    {{ i+1 }}
+  </button>
+</ng-container>
+
+
+  <button (click)="nextPage()"
+          [disabled]="pageNumber * pageSize >= totalCount"
+          class="px-4 py-2 rounded-lg border bg-white hover:bg-gray-100 disabled:opacity-40 dark:text-white">
+    {{tr('Next')}}
+  </button>
+
+</div>
+
+
+  </div>
+</main>

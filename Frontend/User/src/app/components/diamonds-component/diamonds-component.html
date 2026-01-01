@@ -1,0 +1,70 @@
+<div [ngClass]="{
+        'fixed top-0 left-0 z-50 h-screen  transition-transform duration-300': true,
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+        'translate-x-0': isSidebarOpen
+      }" [style.width.px]="isSidebarOpen ? 240 : 56" class="bg-white dark:bg-gray-800 shadow-lg">
+    <app-sidestudent [collapsed]="!isSidebarOpen"></app-sidestudent>
+</div>
+
+<section class="myprofile">
+    <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+    <main [ngStyle]="{'margin-left.px': isSidebarOpen && !isMobile() ? 240 : 56}"
+        class="flex flex-col transition-all duration-300 overflow-auto min-h-screen">
+        <app-user-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+            (toggleDarkModeEvent)="toggleDarkMode()"></app-user-header>
+
+
+        <div class="flex justify-center items-center w-full h-screen p-6">
+            <div class="w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6
+              border border-gray-200 dark:border-gray-700 z-10">
+
+
+                <!-- Diamond Icon -->
+                <div class="text-6xl text-blue-400 text-center">💎</div>
+
+                <!-- Title -->
+                <h2 class="text-center text-black dark:text-white font-bold text-2xl mt-4">
+                    {{ tr('YOUR_DIAMONDS') }}
+                </h2>
+
+                <!-- User Points -->
+                <p class="text-center text-gray-700 dark:text-gray-300 text-xl">
+                    {{ userPoints?.totalPoints || 0 }} 💎
+                </p>
+
+                <!-- Packages -->
+                <div class="w-full space-y-3 mt-4">
+                    <div *ngFor="let pkg of packages">
+                        <button (click)="goToPayment(pkg.diamondPackageId)"
+                            class="w-full bg-blue-700 hover:bg-blue-800 text-white py-3 rounded-xl font-semibold shadow-md">
+                            {{ tr('BUY') }} {{ pkg.diamondAmount }} {{ tr('DIAMONDS') }} — {{ pkg.price }}$
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <p class="text-center text-gray-500 dark:text-gray-300 text-sm mt-5">
+                    {{ tr('BOOST_YOUR_CAREER') }}
+                </p>
+            </div>
+        </div>
+    </main>
+</section>
+<style>
+    .animate-fadeIn {
+        animation: fadeIn 0.35s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

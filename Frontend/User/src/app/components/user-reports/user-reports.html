@@ -1,0 +1,83 @@
+<div [ngClass]="{
+        'fixed top-0 left-0 z-50 h-screen  transition-transform duration-300': true,
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+        'translate-x-0': isSidebarOpen
+      }" [style.width.px]="isSidebarOpen ? 240 : 56" class="bg-white dark:bg-gray-800 shadow-lg">
+    <app-sidestudent [collapsed]="!isSidebarOpen"></app-sidestudent>
+</div>
+
+<div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+<main [ngStyle]="{'margin-left.px': isSidebarOpen && !isMobile() ? 240 : 56}"
+    class="flex flex-col transition-all duration-300 overflow-auto min-h-screen">
+    <app-user-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+        (toggleDarkModeEvent)="toggleDarkMode()"></app-user-header>
+<div class="max-w-4xl mx-auto p-6 space-y-6">
+
+  <!-- Card -->
+  <div class="bg-card border rounded-lg shadow-sm">
+
+    <!-- Card Header -->
+    <div class="p-6 border-b flex justify-between items-center">
+      <div>
+        <h2 class="text-2xl font-bold flex items-center gap-2">
+          <span>📄</span>
+          {{ translation.translate('VERIFICATION_REPORTS') }}
+        </h2>
+        <p class="text-muted mt-1">{{ translation.translate('TRACK_STATUS_REPORTS') }}</p>
+      </div>
+
+    <!-- button for  report TEST -->
+
+    <!-- <button (click)="makeReport.open('user', 2, 1)" class="bg-blue-500 text-white px-4 py-2 rounded">
+      Report User
+    </button> -->
+    
+  </div> 
+  <app-make-report #makeReport></app-make-report>
+  <!-- End of btn TEST  -->
+    <!-- Card Content -->
+    <div class="p-6 space-y-6">
+
+      <!-- Loading -->
+      <div *ngIf="loading" class="p-8 text-center text-gray-500">{{ translation.translate('LOADING_REPORTS') }}</div>
+
+      <!-- No Reports -->
+      <div *ngIf="!loading && reports.length === 0" class="text-center py-12 text-muted">
+        <span class="text-6xl">⚠️</span>
+        <h3 class="text-lg font-semibold mt-4">{{ translation.translate('NO_REPORTS_YET') }}</h3>
+        <p>{{ translation.translate('REPORTS_WILL_APPEAR') }}</p>
+      </div>
+
+      <!-- Reports Table -->
+      <div *ngIf="!loading && reports.length > 0" class="rounded-lg border overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-muted font-medium">Type</th>
+              <th class="px-4 py-3 text-left text-muted font-medium">Description</th>
+              <th class="px-4 py-3 text-left text-muted font-medium">Status</th>
+              <th class="px-4 py-3 text-left text-muted font-medium">Submitted</th>
+              <th class="px-4 py-3 text-left text-muted font-medium">Entity ID</th>            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let report of reports" class="border-t hover:bg-gray-50">
+              <td class="px-4 py-3 font-medium">{{ report.EntityType }}</td>
+              <td class="px-4 py-3">{{ report.ReportDescription }}</td>
+              <td class="px-4 py-3">
+                <span [ngClass]="getStatusBadge(report.ReportStatus).color + ' flex items-center gap-1 px-3 py-1 rounded-full w-fit'">
+                  {{ getStatusBadge(report.ReportStatus).icon }}
+                  <span class="capitalize">{{ report.ReportStatus || 'Pending' }}</span>
+                </span>
+              </td>
+              <td class="px-4 py-3">{{ report.CreatedAt | date:'short' }}</td>
+              <td class="px-4 py-3">{{ report.EntityId }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>

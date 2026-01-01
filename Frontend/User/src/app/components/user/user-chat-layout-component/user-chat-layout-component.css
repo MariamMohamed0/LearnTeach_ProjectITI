@@ -1,0 +1,67 @@
+/* grid layout */
+.chat-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr; /* sidebar + chat */
+  height: 100vh;
+  width: 100%;
+  background: #f5f5f5;
+  gap: 0;
+  transition: all 0.3s ease;
+}
+
+/* sidebar */
+app-user-chat-sidebar-component {
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+/* sidebar content */
+.user-chat-sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* chat window */
+.chat-window-container {
+  background: #e5ddd5;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* responsive for smaller screens */
+@media (max-width: 768px) {
+  .chat-layout {
+    grid-template-columns: 80px 1fr; /* تصغير السايدبار */
+  }
+
+  app-user-chat-sidebar-component {
+    width: 80px; 
+    
+  }
+}
+
+/* responsive للشاشات الصغيرة جدًا */
+@media (max-width: 480px) {
+  .chat-layout {
+    grid-template-columns: 0 1fr; /* يخفي السايدبار تمامًا */
+  }
+
+  app-user-chat-sidebar-component {
+    display: none;
+  }
+}

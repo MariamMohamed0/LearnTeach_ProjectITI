@@ -1,0 +1,27 @@
+<footer>
+    <div
+        class="bg-blue-100 w-[90%] md:w-[80%] mx-auto flex flex-col md:flex-row justify-between items-center gap-6 px-5 py-6 rounded-2xl shadow-md">
+
+
+        <div class="flex flex-wrap justify-center md:justify-start items-center gap-6 text-center">
+            <a [routerLink]="['/']" fragment="home"
+                class="text-gray-600 hover:text-blue-500 text-xl dark:text-white">{{tr('Home')}}</a>
+            <a [routerLink]="['/']" fragment="about"
+                class="text-gray-600 hover:text-blue-500 text-xl dark:text-white">{{tr('About')}}</a>
+            <a [routerLink]="['/']" fragment="section"
+                class="text-gray-600 hover:text-blue-500 text-xl dark:text-white">
+                {{tr('Sections')}}
+            </a>
+            <a [routerLink]="['/']" fragment="contact"
+                class="text-gray-600 hover:text-blue-500 text-xl dark:text-white">{{tr('Contact')}}</a>
+        </div>
+
+
+        <div class="flex justify-center md:justify-end items-center gap-5">
+            <a href="#" class="text-gray-600 hover:text-blue-800 text-2xl"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="text-gray-600 hover:text-blue-800 text-2xl"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="#" class="text-gray-600 hover:text-blue-800 text-2xl"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+
+    </div>
+</footer>

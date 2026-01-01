@@ -1,0 +1,17 @@
+<div class="h-full bg-gray-100 p-2 dark:bg-gray-800">
+
+        <a routerLink="/DashboardComponent"
+           class="flex items-center gap-3 p-2 rounded 
+                  hover:bg-gray-200 dark:hover:bg-gray-700">
+         <i class="fa-solid fa-circle-chevron-left"></i>
+         <span>{{tr('Back')}}</span>
+        </a>
+
+      <!-- <h3 class="font-bold mb-2">Chats</h3> -->
+      <ul>
+        <li *ngFor="let contact of contacts" (click)="openChat(contact)">
+          {{ contact.name }}
+        </li>
+
+      </ul>
+    </div>

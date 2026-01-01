@@ -1,0 +1,54 @@
+
+
+header .context {
+    width: 80%;
+    margin: 100px auto 0px;
+}
+
+header .box {
+    background-image: url("../../../../../public/images/hero.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    position: relative;
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding: 15px 20px;
+}
+
+
+header .box::before {
+    content: "";
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
+    inset: 0;
+    z-index: 1;
+    border-radius: 20px;
+}
+
+header .box>* {
+    position: relative;
+    z-index: 2;
+}
+
+
+header .context h2 {
+    padding-top: 150px;
+    color: white;
+}
+
+header .context .bt {
+    padding-bottom: 150px;
+}
+@media screen and (max-width:640px) {
+    header .box {
+        padding: 0 20px;
+    }
+    header .context h2 {
+        padding-top: 50px;
+    }
+    header .context .bt {
+        padding-bottom: 50px;
+    }
+}

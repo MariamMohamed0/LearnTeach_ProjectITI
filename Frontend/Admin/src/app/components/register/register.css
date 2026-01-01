@@ -1,0 +1,161 @@
+/* 
+.container {
+  max-width: 450px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px #0001;
+}
+
+.field label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.field input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.roles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.role-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.role-card.active {
+  border: 2px solid #4a60ff;
+  background: #f5f7ff;
+  box-shadow: 0 0 10px #4a60ff44;
+}
+
+.role-card .icon {
+  font-size: 30px;
+}
+
+button {
+  background: #4a60ff;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+}
+
+button:disabled {
+  opacity: 0.6;
+} */
+/* .container {
+  max-width: 450px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px #0001;
+}
+
+.field label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.field input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.roles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.role-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.role-card.active {
+  border: 2px solid #4a60ff;
+  background: #f5f7ff;
+  box-shadow: 0 0 10px #4a60ff44;
+}
+
+.role-card .icon {
+  font-size: 30px;
+}
+
+button {
+
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+}
+
+button:disabled {
+  opacity: 0.6;
+} */
+
+@keyframes blink {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+
+  50% {
+    transform: scaleY(0.1);
+  }
+}
+
+.animate-blink {
+  animation: blink 0.15s ease-in-out;
+}
+.bg-background{
+  background-color: #fff;
+}
+.bg-primary{
+  background-color: #0080ff;
+}
+.text-white{
+  color: #fff;
+}
+.text-primary{
+  color:#0080ff ;
+}

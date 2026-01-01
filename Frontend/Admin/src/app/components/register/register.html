@@ -1,0 +1,133 @@
+<div class="flex min-h-screen items-center justify-center bg-background p-4">
+  <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-md">
+
+    <!-- HEADER -->
+    <div class="flex flex-col p-6 space-y-1">
+      <h3 class="tracking-tight text-2xl font-bold text-card-foreground">Create an account</h3>
+      <p class="text-sm text-muted-foreground">Enter your information to get started</p>
+    </div>
+
+    <!-- FORM -->
+    <div class="p-6 pt-0">
+      <form [formGroup]="registerForm" (ngSubmit)="register()" class="space-y-4">
+
+        <!-- FIRST + LAST NAME -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label for="fName" class="text-sm font-medium leading-none text-card-foreground">First Name</label>
+            <input id="fName" formControlName="fName" type="text"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2">
+            <div *ngIf="f['fName'].touched && f['fName'].invalid" class="text-red-500 text-sm">
+              <span *ngIf="f['fName'].errors?.['required']">First Name is required</span>
+              <span *ngIf="f['fName'].errors?.['minlength']">Minimum 3 characters</span>
+              <span *ngIf="f['fName'].errors?.['maxlength']">Maximum 12 characters</span>
+              <span *ngIf="f['fName'].errors?.['invalidStart']">Must start with a capital letter</span>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label for="lName" class="text-sm font-medium leading-none text-card-foreground">Last Name</label>
+            <input id="lName" formControlName="lName" type="text"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2">
+            <div *ngIf="f['lName'].touched && f['lName'].invalid" class="text-red-500 text-sm">
+              <span *ngIf="f['lName'].errors?.['required']">Last Name is required</span>
+              <span *ngIf="f['lName'].errors?.['minlength']">Minimum 3 characters</span>
+              <span *ngIf="f['lName'].errors?.['maxlength']">Maximum 12 characters</span>
+              <span *ngIf="f['lName'].errors?.['invalidStart']">Must start with a letter</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="space-y-2">
+          <label for="email" class="text-sm font-medium leading-none text-card-foreground">Email</label>
+          <input id="email" formControlName="email" type="email"
+            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2">
+          <div *ngIf="f['email'].touched && f['email'].invalid" class="text-red-500 text-sm">
+            <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+            <span *ngIf="f['email'].errors?.['email']">Invalid email format</span>
+          </div>
+        </div>
+
+        <!-- OTP -->
+        <div class="space-y-2">
+          <label for="otp" class="text-sm font-medium leading-none text-card-foreground">OTP</label>
+          <input id="otp" formControlName="otp" type="text"
+            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2">
+          <div *ngIf="f['otp'].touched && f['otp'].invalid" class="text-red-500 text-sm">
+            <span *ngIf="f['otp'].errors?.['required']">OTP is required</span>
+            <span *ngIf="f['otp'].errors?.['minlength']">OTP must be at least 4 digits</span>
+            <span *ngIf="f['otp'].errors?.['maxlength']">OTP must be max 6 digits</span>
+          </div>
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="space-y-2">
+          <label for="password" class="text-sm font-medium leading-none text-card-foreground">Password</label>
+          <div class="relative">
+            <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10">
+            <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 p-0 bg-transparent border-none"
+              (click)="showPassword = !showPassword">   <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2">
+                <path *ngIf="showPassword" stroke-linecap="round" stroke-linejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg></button>
+          </div>
+          <div *ngIf="f['password'].touched && f['password'].errors" class="text-red-500 text-sm">
+            <span *ngIf="f['password'].errors['required']">Password is required</span>
+            <span *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</span>
+            <span *ngIf="f['password'].errors['pattern']">Password must contain 1 uppercase and 1 number</span>
+          </div>
+        </div>
+
+        <!-- CONFIRM PASSWORD -->
+        <div class="space-y-2">
+          <label for="confirmedPassword" class="text-sm font-medium leading-none text-card-foreground">Confirm Password</label>
+          <div class="relative">
+            <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmedPassword"
+              formControlName="confirmedPassword"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10">
+            <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 p-0 bg-transparent border-none"
+              (click)="showConfirmPassword = !showConfirmPassword">   <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2">
+                <path *ngIf="showPassword" stroke-linecap="round" stroke-linejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg></button>
+          </div>
+          <div *ngIf="f['confirmedPassword'].touched && f['confirmedPassword'].invalid" class="text-red-500 text-sm">
+            <span *ngIf="f['confirmedPassword'].errors?.['required']">Please confirm your password</span>
+            <span *ngIf="f['confirmedPassword'].errors?.['passwordMismatch']">Passwords do not match</span>
+          </div>
+        </div>
+
+        <!-- TERMS -->
+        <div class="flex items-center space-x-2">
+          <input type="checkbox" id="terms" formControlName="terms"
+            class="h-4 w-4 rounded border border-input bg-background">
+          <label for="terms" class="text-sm text-card-foreground">I agree to the <a href="#" class="text-primary">Terms and Privacy Policies</a></label>
+        </div>
+        <div *ngIf="f['terms'].touched && f['terms'].invalid" class="text-red-500 text-sm">
+          <span>You must agree to the terms</span>
+        </div>
+
+        <!-- BUTTON -->
+        <button type="submit" [disabled]="loading"
+          class=" inline-flex items-center justify-center rounded-md bg-primary text-white text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full text-sm font-medium">
+          <span *ngIf="!loading">Sign Up</span>
+          <span *ngIf="loading" class="animate-pulse">Registering account...</span>
+        </button>
+
+        <div *ngIf="message" class="text-red-500 mt-2">{{ message }}</div>
+      </form>
+
+      <div class="mt-4 text-center text-sm text-card-foreground">
+        Already have an account?
+        <a class="text-primary hover:underline font-medium" href="/login">Sign in</a>
+      </div>
+    </div>
+
+  </div>
+</div>

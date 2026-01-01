@@ -1,0 +1,73 @@
+<div class="cardid container">
+  <!-- <h2 class="text-3xl font-bold my-4">Your Certificates</h2>
+
+  <button (click)="addCertificate()" class="btn-add">Add Certificate</button>
+
+  <div *ngFor="let cert of certificates" class="card certificate-card my-4 p-4 border rounded shadow">
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-xl font-semibold">Certificate</h3>
+      <button (click)="removeCertificate(cert)" class="btn-remove">X</button>
+    </div>
+
+    <div class="mb-2">
+      <label>Name:</label>
+      <input [(ngModel)]="cert.Cername" type="text" placeholder="Certificate Name" />
+    </div>
+
+    <div class="mb-2">
+      <label>Institution:</label>
+      <input [(ngModel)]="cert.InstatutionName" type="text" placeholder="Institution Name" />
+    </div>
+
+    <div class="mb-2">
+      <label>Year:</label>
+      <input [(ngModel)]="cert.EarnedYear" type="number" placeholder="Year" />
+    </div>
+
+    <div class="mb-2">
+      <label>Certificate Image:</label>
+      <input type="file" (change)="onFileSelected($event, cert)" />
+    </div>
+
+    <div *ngIf="cert.Cerpic" class="mb-2">
+      <img [src]="cert.Cerpic" alt="Certificate Image" class="w-40 h-auto border rounded" />
+    </div>
+  </div>
+
+  <button (click)="saveAllAndNext()" class="btn-next">Save & Next</button>
+  <button (click)="skipCertificates()">Skip</button> -->
+  <h2 class="text-3xl font-bold my-4">{{ translation.translate('YOUR_CERTIFICATES') }}</h2>
+
+<button (click)="addCertificate()" class="btn-add">{{ translation.translate('ADD_CERTIFICATE') }}</button>
+
+<div *ngFor="let cert of certificates" class="card certificate-card my-4 p-4 border rounded shadow">
+  <div class="flex justify-between items-center mb-2">
+    <h3 class="text-xl font-semibold">{{ translation.translate('CERTIFICATE') }}</h3>
+    <button (click)="removeCertificate(cert)" class="btn-remove">X</button>
+  </div>
+
+  <div class="mb-2">
+    <label>{{ translation.translate('NAME') }}:</label>
+    <input [(ngModel)]="cert.Cername" type="text" placeholder="{{ translation.translate('CERTIFICATE_NAME_PH') }}" />
+  </div>
+
+  <div class="mb-2">
+    <label>{{ translation.translate('INSTITUTION') }}:</label>
+    <input [(ngModel)]="cert.InstatutionName" type="text" placeholder="{{ translation.translate('INSTITUTION_NAME_PH') }}" />
+  </div>
+
+  <div class="mb-2">
+    <label>{{ translation.translate('YEAR') }}:</label>
+    <input [(ngModel)]="cert.EarnedYear" type="number" placeholder="{{ translation.translate('YEAR_PH') }}" />
+  </div>
+
+  <div class="mb-2">
+    <label>{{ translation.translate('CERTIFICATE_IMAGE') }}:</label>
+    <input type="file" (change)="onFileSelected($event, cert)" />
+  </div>
+</div>
+
+<button (click)="saveAllAndNext()" class="btn-next">{{ translation.translate('SAVE_NEXT') }}</button>
+<button (click)="skipCertificates()">{{ translation.translate('SKIP') }}</button>
+
+</div>

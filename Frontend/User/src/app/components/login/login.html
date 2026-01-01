@@ -1,0 +1,176 @@
+<!-- <div
+  class="flex flex-col md:flex-row items-center justify-center mt-24 max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-2xl overflow-hidden text-gray-900 dark:text-white">
+
+  <div class="w-full md:w-1/2 p-10 mt-32">
+    <h1 class="text-2xl font-bold mb-3">Login</h1>
+    <p class="text-gray-500 dark:text-gray-400 mb-5">Enter your account credentials</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-4">
+
+
+      <div class="mb-4">
+        <label for="email" class="block mb-2">Email</label>
+        <input type="email" id="email" placeholder="Email" formControlName="email" autofocus
+          class="border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          class="text-red-500 text-sm mt-1">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Enter a valid email.</span>
+        </div>
+      </div>
+
+
+      <div class="mb-4 relative w-full">
+        <label for="password" class="block mb-2">Password</label>
+
+        <div class="relative">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" placeholder="Password"
+            formControlName="password"
+            class="border p-2 w-full rounded pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
+
+          <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 p-0 focus:outline-none"
+            style="background: transparent; border: none; box-shadow: none;" (click)="showPassword = !showPassword">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="#1F2937"
+              stroke-width="2.5">
+
+              <path *ngIf="showPassword" stroke-linecap="round" stroke-linejoin="round"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </button>
+        </div>
+
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          class="text-red-500 text-sm mt-1">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">
+            Password is required.
+          </span>
+        </div>
+      </div>
+
+      <p class="mt-2 text-gray-500 dark:text-gray-400 text-sm">
+        Forget your password?
+        <a routerLink="/forget-password" class="text-blue-500 hover:underline">Forget password</a>
+      </p>
+
+      <button type="submit" [disabled]="loginForm.invalid || loading"
+        class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-700 transition-colors flex justify-center items-center">
+        <span *ngIf="!loading">Login</span>
+        <span *ngIf="loading" class="animate-pulse">Logging in...</span>
+      </button>
+
+
+      <div *ngIf="message" class="text-red-500 mt-2">{{ message }}</div>
+    </form>
+
+
+    <p class="mt-5 text-gray-500 dark:text-gray-400 text-sm">
+      Don't have an account?
+      <a routerLink="/register" class="text-blue-500 hover:underline">Sign Up</a>
+    </p>
+  </div>
+
+
+  <div class="w-full md:w-1/2 flex justify-center items-center p-6">
+    <img src="images/login.png" alt="Login Image" class="w-64 md:w-80 h-auto rounded-xl object-cover shadow-lg">
+  </div>
+</div> -->
+
+<div class="flex min-h-screen items-center justify-center bg-background p-4">
+  <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-md">
+
+    <div class="flex flex-col p-6 space-y-1">
+      <h3 class="tracking-tight text-2xl font-bold">Login</h3>
+      <p class="text-sm text-muted-foreground">Enter your account credentials</p>
+    </div>
+
+    <div class="p-6 pt-0">
+
+      <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-4">
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium leading-none" for="email">Email</label>
+
+          <input
+            type="email"
+            id="email"
+            placeholder="Email"
+            formControlName="email"
+            autofocus
+            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          />
+
+          <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+               class="text-red-500 text-sm mt-1">
+            <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</span>
+            <span *ngIf="loginForm.get('email')?.errors?.['email']">Enter a valid email.</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium leading-none" for="password">Password</label>
+
+          <div class="relative">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              placeholder="Password"
+              formControlName="password"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm placeholder:text-muted-foreground
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            />
+
+            <button
+              type="button"
+              class="absolute right-3 top-1/2 -translate-y-1/2 p-0 bg-transparent border-none"
+              (click)="showPassword = !showPassword">
+
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2">
+                <path *ngIf="showPassword" stroke-linecap="round" stroke-linejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+
+            </button>
+          </div>
+
+          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+               class="text-red-500 text-sm mt-1">
+            <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</span>
+          </div>
+        </div>
+
+        <p class="text-muted-foreground text-sm">
+          Forget your password?
+          <a routerLink="/forget-password" class="text-primary hover:underline font-medium">Forget password</a>
+        </p>
+
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid || loading"
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium
+                 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 w-full
+                 transition-colors disabled:pointer-events-none disabled:opacity-50">
+
+          <span *ngIf="!loading">Login</span>
+          <span *ngIf="loading" class="animate-pulse">Logging in...</span>
+        </button>
+
+        <div *ngIf="message" class="text-red-500 mt-2">{{ message }}</div>
+
+      </form>
+
+      <div class="mt-4 text-center text-sm">
+        Don't have an account?
+        <!-- <a routerLink="/register" class="text-primary hover:underline font-medium">Sign Up</a> -->
+        <a routerLink="/generate-otp" class="text-primary hover:underline font-medium">Sign Up</a>
+      </div>
+
+    </div>
+
+  </div>
+</div>

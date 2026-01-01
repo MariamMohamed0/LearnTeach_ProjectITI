@@ -1,0 +1,48 @@
+<header class="h-16 border-b bg-card dark:bg-gray-800 flex items-center justify-between px-6 sticky top-0 z-20">
+  <div class="flex items-center gap-4">
+    <button
+      class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 h-7 w-7"
+      (click)="toggleSidebar()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-200" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor">
+        <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+        <path d="M9 3v18"></path>
+      </svg>
+      <span class="sr-only">Toggle Sidebar</span>
+    </button>
+  </div>
+
+  <div class="flex items-center gap-4 relative">
+    <button (click)="toggleDarkMode()"
+      class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100">
+      <fa-icon [icon]="isDarkMode ? faMoon : faSun"></fa-icon>
+    </button>
+    <div class="relative">
+      <button (click)="toggleRoleMenu()"
+        class="flex items-center gap-2 px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100">
+        {{ userRole | titlecase }}
+        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      <div *ngIf="isRoleMenuOpen"
+        class="absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50">
+        <ul>
+          <li>
+            <button (click)="switchRole('student')"
+              class="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+              <span>👨‍🎓</span> Student
+            </button>
+          </li>
+          <li>
+            <button (click)="switchRole('teacher')"
+              class="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+              <span>👩‍🏫</span> Teacher
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>

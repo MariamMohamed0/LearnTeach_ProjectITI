@@ -1,0 +1,22 @@
+h3{
+    font-size: 30px;
+}
+li{
+    cursor: pointer;
+    font-size: 20px;
+    margin: 10px 20px;
+}
+i,span{
+    font-size: 30px;
+}
+@media (max-width: 768px) {
+li{
+    cursor: pointer;
+    font-size: 15px;
+    margin: 0px;
+    margin-bottom: 10px;
+}
+i,span{
+    font-size: 15px;
+}
+}

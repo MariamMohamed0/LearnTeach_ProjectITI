@@ -1,0 +1,102 @@
+<div [ngClass]="{
+        'fixed top-0 left-0 z-50 h-screen  transition-transform duration-300': true,
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+        'translate-x-0': isSidebarOpen
+      }" [style.width.px]="isSidebarOpen ? 240 : 56" class="bg-white dark:bg-gray-800 shadow-lg">
+</div>
+
+<section class="myprofile">
+    <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+    <main [ngStyle]="{'margin-left.px': isSidebarOpen && !isMobile() ? 240 : 56}"
+        class="flex flex-col transition-all duration-300 overflow-auto min-h-screen">
+        <app-user-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+            (toggleDarkModeEvent)="toggleDarkMode()"></app-user-header>
+
+
+        <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4 relative">
+            <div
+                class="bg-white dark:bg-gray-800 shadow-2xl rounded-3xl p-6 w-full max-w-md border border-gray-200 dark:border-gray-700 relative">
+
+
+
+                <h2 class="text-3xl font-extrabold text-center mb-6 text-gray-900 dark:text-white tracking-wide">
+                    {{ tr('PREMIUM_PAYMENT') }}
+                </h2>
+
+                <div *ngIf="loading" class="text-center text-gray-500 text-lg">{{ tr('LOADING') }}...</div>
+
+                <div *ngIf="!loading">
+                    <!-- معلومات الباكدج -->
+                    <div class="mb-6 p-5 bg-gray-50 dark:bg-gray-700 rounded-2xl shadow-inner">
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">{{ pkg.packageName }}</h3>
+                        <p class="text-gray-700 dark:text-gray-200 mb-1">
+                            {{ pkg.packageDuration }} {{ tr('Month') }}
+                        </p>
+                        <p class="text-gray-700 dark:text-gray-200 mb-3 font-semibold">
+                            {{ pkg.diamondPoints }} {{ tr('DIAMONDS') }}
+                        </p>
+                        <ul class="list-disc list-inside text-gray-700 dark:text-gray-200 space-y-1">
+                            <li *ngFor="let feature of pkg.packageDetails">{{ feature }}</li>
+                        </ul>
+                    </div>
+
+                    <!-- اختيار طريقة الدفع -->
+                    <div class="mb-6">
+                        <p class="font-semibold text-gray-800 dark:text-gray-200 mb-2">{{ tr('SELECT_PAYMENT_METHOD') }}
+                        </p>
+                        <div class="flex gap-4">
+                            <button (click)="selectPaymentMethod('visa')"
+                                [ngClass]="visa ? 'bg-blue-600 text-white shadow-lg' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'"
+                                class="flex-1 p-3 rounded-xl font-semibold transition-all duration-200 hover:scale-105">Visa</button>
+
+                            <button (click)="selectPaymentMethod('mastercard')"
+                                [ngClass]="mastercard ? 'bg-blue-600 text-white shadow-lg' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'"
+                                class="flex-1 p-3 rounded-xl font-semibold transition-all duration-200 hover:scale-105">Mastercard</button>
+                        </div>
+                    </div>
+
+                    <!-- فورم بيانات البطاقة -->
+                    <div class="mb-6">
+                        <p class="font-semibold text-gray-800 dark:text-gray-200 mb-2">{{ tr('CARD_DETAILS') }}</p>
+                        <div class="space-y-3">
+                            <input type="text" [(ngModel)]="cardNumber" (blur)="validateCardNumber()"
+                                placeholder="Card Number" class="w-full p-3 rounded-xl bg-gray-100 dark:bg-gray-700" />
+
+                            <p *ngIf="cardErrors.number" class="text-red-500 text-sm mt-1">{{ cardErrors.number }}</p>
+
+                            <div class="flex gap-3">
+                                <input type="text" [(ngModel)]="cardExpiry" (blur)="validateExpiry()"
+                                    placeholder="MM/YY" class="flex-1 p-3 rounded-xl bg-gray-100 dark:bg-gray-700" />
+
+                                <p *ngIf="cardErrors.expiry" class="text-red-500 text-sm mt-1">{{ cardErrors.expiry }}
+                                </p>
+
+
+                                <input type="text" [(ngModel)]="cardCvv" (blur)="validateCVV()" placeholder="CVV"
+                                    class="w-24 p-3 rounded-xl bg-gray-100 dark:bg-gray-700" />
+
+                                <p *ngIf="cardErrors.cvv" class="text-red-500 text-sm mt-1">{{ cardErrors.cvv }}</p>
+                            </div>
+
+                            <input type="text" [(ngModel)]="cardHolder" (blur)="validateCardHolder()"
+                                placeholder="Card Holder Name"
+                                class="w-full p-3 rounded-xl bg-gray-100 dark:bg-gray-700" />
+
+                            <p *ngIf="cardErrors.holder" class="text-red-500 text-sm mt-1">{{ cardErrors.holder }}</p>
+                        </div>
+                    </div>
+
+                    <button (click)="pay()" [disabled]="processing"
+                        class="w-full p-4 bg-blue-600 text-white rounded-2xl font-extrabold text-lg shadow-lg transition-all duration-200">
+                        {{ processing ? tr('PROCESSING') : tr('PAY_NOW') }}
+                    </button>
+
+                    <p *ngIf="successMessage"
+                        class="mt-4 text-center text-green-500 dark:text-green-400 font-semibold text-lg">
+                        {{ successMessage }}</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</section>

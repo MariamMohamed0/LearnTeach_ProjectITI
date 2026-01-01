@@ -1,0 +1,51 @@
+<section class="flex w-full min-h-screen bg-gray-50 dark:bg-gray-900 ">
+  <div [ngClass]="{
+        'fixed inset-0 z-50 transform transition-transform duration-300': isMobile(),
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+
+        'w-7': !isSidebarOpen && !isMobile(),
+        'w-60': isSidebarOpen || isMobile()
+      }" class="bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 flex-shrink-0">
+    <app-sidebar [collapsed]="!isSidebarOpen"></app-sidebar>
+  </div>
+
+  <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+  <main [ngClass]="{
+      'ml-0 w-full': isMobile(),
+      'ml-9 w-[calc(100%-2rem)]': !isSidebarOpen && !isMobile(),   
+      'ml-5 w-[calc(100%-14rem)]': isSidebarOpen && !isMobile()   
+    }" class="flex flex-col transition-all duration-300  overflow-auto">
+
+    <app-admin-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+      (toggleDarkModeEvent)="toggleDarkMode()">
+    </app-admin-header>
+<div
+    class="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-50">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 w-80">
+        <!-- Diamond Icon -->
+        <div class="flex justify-center mb-4">
+            <span class="text-5xl text-blue-300">💎</span>
+        </div>
+        <!-- Title -->
+        <h2 class="text-center text-black dark:text-white font-bold text-xl mb-2">{{ tr('YOUR_DIAMONDS') }}</h2>
+        <!-- User Points -->
+        <p class="text-center text-gray-700 dark:text-gray-200 mb-4">
+            {{ userPoints?.totalPoints || 0 }} 💎
+        </p>
+        <!-- Packages -->
+        <div *ngFor="let pkg of packages" class="mb-2">
+            <button (click)="purchase(pkg.diamondPackageId)"
+                class="w-full bg-blue-700 hover:bg-blue-800 text-white py-2 rounded-lg font-semibold">
+                {{ tr('BUY') }} {{ pkg.diamondAmount }} {{ tr('DIAMONDS') }} {{ tr('FOR') }} {{ pkg.price }}$
+            </button>
+        </div>
+        <!-- Footer -->
+        <p class="text-center text-gray-600 dark:text-gray-300 text-sm mt-4">
+            {{ tr('BOOST_YOUR_CAREER') }}
+        </p>
+    </div>
+</div>
+    </main>
+    </section>
+    

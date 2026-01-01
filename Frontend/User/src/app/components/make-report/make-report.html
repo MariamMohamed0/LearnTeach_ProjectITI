@@ -1,0 +1,37 @@
+
+<div *ngIf="dialogOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg w-96 space-y-4 shadow-lg">
+      <h2 class="text-xl font-bold mb-2 text-blue-600">Submit Report</h2>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Description *</label>
+          <textarea formControlName="ReportDescription"
+                    class="w-full border px-2 py-1 rounded"
+                    placeholder="Describe the issue..."
+                    rows="4">
+          </textarea>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" class="px-4 py-2 border rounded" (click)="close()">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded" [disabled]="form.invalid">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- for post  -->
+ <!-- for comment  -->
+  <!-- for user  -->
+  <!-- <app-make-report #makeReport></app-make-report>
+  <button (click)="makeReport.open('post', post.id, post.userId)">
+    Report Post
+  </button>
+  
+  <button (click)="makeReport.open('comment', comment.id, comment.userId)">
+    Report Comment
+  </button>
+  
+  <button (click)="makeReport.open('user', entityId , user.id)">
+    Report User
+  </button> -->
+  

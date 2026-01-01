@@ -1,0 +1,196 @@
+/* ====== المتغيرات الرئيسية ====== */
+:root {
+  /* خلفيات */
+  --bg-setting: #f4f6f8;
+  --bg-main: #ffffff;
+  --bg-profile: #ffffff;
+  --bg-card: #ffffff;
+
+  /* نصوص */
+  --text-primary: #1f2937;
+  --text-dark: #111827;
+  --text-placeholder: #000;
+
+  /* ألوان الحدود */
+  --border-input: #cbd5e1;
+  --border-button: #9ba5b6;
+
+  /* ألوان التركيز */
+  --focus-border: #2563eb;
+  --focus-shadow: rgba(37, 99, 235, 0.2);
+
+  /* أزرار */
+  --btn-primary-bg: #2563eb;
+  --btn-primary-hover: #1e40af;
+  --btn-text: #ffffff;
+
+  /* Shadows */
+  --shadow-main: rgba(0,0,0,0.05);
+  --shadow-card-hover: rgba(0,0,0,0.1);
+
+  /* Stars */
+  --star-yellow: #facc15;
+  --star-gray: #d1d5db;
+}
+[data-theme="dark"] {
+  --bg-setting: #1f2937;
+  --bg-main: #111827;
+  --bg-profile: #1f2937;
+  --bg-card: #1f2937;
+  --text-primary: #f4f6f8;
+  --text-dark: #ffffff;
+  --border-input: #374151;
+  --border-button: #6b7280;
+  --focus-border: #3b82f6;
+  --focus-shadow: rgba(59, 130, 246, 0.2);
+  --btn-primary-bg: #3b82f6;
+  --btn-primary-hover: #2563eb;
+  --btn-text: #ffffff;
+  --shadow-main: rgba(0,0,0,0.5);
+  --shadow-card-hover: rgba(0,0,0,0.6);
+  --star-yellow: #facc15;
+  --star-gray: #6b7280;
+}
+
+/* ====== Container الرئيسي ====== */
+.setting {
+  background-color: var(--bg-setting);
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-primary);
+}
+
+/* Main content داخل setting */
+.setting main {
+  background-color: var(--bg-main);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px var(--shadow-main);
+  padding: 2rem;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Profile container */
+.profile-container {
+  background-color: var(--bg-profile);
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px var(--shadow-main);
+  padding: 2rem;
+  transition: transform 0.3s;
+}
+
+.profile-container:hover {
+  transform: translateY(-5px);
+}
+
+/* العناوين */
+.profile-container h3, 
+.setting h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  /* color: var(--text-primary); */
+}
+
+/* Inputs و Textarea */
+input[type="text"], input[type="url"], input[type="number"], textarea {
+  border: 1.5px solid var(--border-input);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--focus-border);
+  box-shadow: 0 0 0 2px var(--focus-shadow);
+  outline: none;
+}
+
+/* الأزرار */
+button {
+  border: 2px solid var(--border-button);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+/* ألوان الأزرار */
+.btn-primary, .bg-blue-950 {
+  /* background-color: var(--btn-primary-bg); */
+  color: var(--btn-text);
+}
+
+.btn-primary:hover, .bg-blue-950:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+/* Cards Skills & Certificates & Projects */
+.card {
+  background-color: var(--bg-card);
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px var(--shadow-main);
+  padding: 1.5rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--shadow-card-hover);
+}
+
+/* Stars Rating */
+svg.text-yellow-500 {
+  color: var(--star-yellow);
+}
+
+svg.text-gray-300 {
+  color: var(--star-gray);
+}
+
+/* Overlay */
+.setting .overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 40;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .setting main {
+    padding: 1rem;
+  }
+
+  .profile-container {
+    padding: 1rem;
+  }
+}
+
+/* اللون الافتراضي للنص placeholder في select */
+select option[value=""] {
+  color: var(--text-placeholder) !important;
+}
+
+/* بعد الاختيار، اجعل النص أسود */
+select option:not([value=""]) {
+  color: var(--text-dark);
+}
+/* Light mode */
+:root {
+  --bg-card: #ffffff;
+  --text-card-foreground: #1f2937;
+}
+
+/* Dark mode */
+.dark {
+  --bg-card: #1f2937;
+  --text-card-foreground: #f4f6f8;
+}
+

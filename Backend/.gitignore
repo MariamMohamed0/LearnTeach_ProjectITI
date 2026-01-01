@@ -1,0 +1,7 @@
+﻿## .NET Core
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache

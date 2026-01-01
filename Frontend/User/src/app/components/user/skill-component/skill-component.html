@@ -1,0 +1,69 @@
+<!-- skill-component.html -->
+<div class="calm-card" *ngIf="showPage">
+  <div class="calm-inner">
+    <div class="container">
+      <div class="header">
+        <div class="title">
+          <h1>Select Your Skills</h1>
+          <p>Pick categories, choose skills and rate them (1–5). Selected skills remain even if you close categories.</p>
+        </div>
+        <div class="controls">
+          <!-- <button class="btn" (click)="toggleTheme()">Theme: {{theme | titlecase}}</button> -->
+          <button class="btn primary" [disabled]="selectedSkillCount === 0" (click)="proceedNext()">Next: Certificates</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <label class="select-label">Choose a Category</label>
+        <select *ngIf="categories.length" [(ngModel)]="selectedCategoryId" (ngModelChange)="onCategorySelect($event)">
+          <option value="">-- Choose Category --</option>
+          <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+        </select>
+
+        <div class="categories-list">
+          <div class="category-block card" *ngFor="let cat of displayedCategories" [id]="'cat-'+cat.id">
+            <div class="cat-head" (click)="toggleCategory(cat)">
+              <h3>{{cat.name}}</h3>
+              <button class="icon-x" (click)="removeCategory(cat); $event.stopPropagation()">✕</button>
+            </div>
+
+            <div class="skills-grid" *ngIf="!cat.collapsed && cat.skills?.length">
+              <div class="skill-item" *ngFor="let skill of cat.skills">
+                <div class="skill-left">
+                  <input type="checkbox" [checked]="isSelected(skill)" (change)="toggleSkill(skill)" [id]="'cb-'+skill.id" />
+                  <label [for]="'cb-'+skill.id">{{skill.name}}</label>
+                </div>
+                <div class="stars" [style.display]="isSelected(skill) ? 'flex' : 'none'">
+                  <span *ngFor="let s of [1,2,3,4,5]" class="star" 
+                        [class.active]="selectedSkills[skill.id] >= s"
+                        (click)="rateSkill(skill,s)">★</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="footer-actions">
+          <div style="display:flex;align-items:center;margin-right:auto">
+            <div class="hint">Selected skills remain even if you close categories.</div>
+          </div>
+          <div class="count-badge">{{selectedSkillCount}}</div>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="panel">
+          <h4>Selected Skills</h4>
+          <div class="chips">
+            <div class="chip" *ngFor="let skill of selectedSkills | keyvalue">
+              {{ getSkillName(skill.key) }} — {{ skill.value }}★
+              <button class="remove" (click)="removeSkill(skill.key)">✕</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="p-4">
+
+  <!-- اختيار اليوزر -->
+  <select [(ngModel)]="selectedUserId" class="border p-2 mb-3 w-full">
+    <option *ngFor="let u of users" [value]="u.id">
+      {{u.fname}} {{u.lname}}
+    </option>
+  </select>
+
+  <!-- الرسائل -->
+  <div class="border h-72 overflow-y-auto p-2 mb-3">
+    <div *ngFor="let msg of messages" class="mb-2">
+      <b>
+        {{ msg.senderId == myUserId ? 'أنا' : 'هو' }}:
+      </b>
+      {{ msg.message }}
+    </div>
+  </div>
+
+  <!-- الإرسال -->
+  <div class="flex">
+    <input
+      [(ngModel)]="message"
+      class="border p-2 flex-1"
+      placeholder="اكتب رسالتك..."
+    />
+    <button
+      (click)="send()"
+      class="bg-blue-600 text-white px-4 py-2">
+      إرسال
+    </button>
+  </div>
+
+</div>

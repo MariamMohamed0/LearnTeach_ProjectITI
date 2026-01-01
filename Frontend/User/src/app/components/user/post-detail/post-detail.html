@@ -1,0 +1,417 @@
+<!-- <div class="p-6 max-w-3xl mx-auto">
+  <article class="bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-bold mb-2">Post #{{ post?.postId }}</h2>
+    <p class="text-gray-800 mb-4">{{ post?.content }}</p>
+
+    <div class="flex items-center gap-3 text-sm text-gray-600">
+      <button (click)="toggleLike()" class="px-3 py-1 rounded bg-indigo-600 text-white">
+        {{ likedByUser ? 'Unlike' : 'Like' }} ({{ likes.length }})
+      </button>
+      <span>{{ post?.totalComments ?? comments.length }} comments</span>
+    </div>
+  </article>
+
+  <section class="mt-6">
+    <h3 class="font-semibold mb-2">Comments</h3>
+
+    <div class="space-y-3">
+      <div *ngFor="let c of comments" class="bg-white p-3 rounded shadow-sm">
+        <div class="text-sm text-gray-700">{{ c.userName || 'User' }}</div>
+        <div class="text-gray-800">{{ c.commentText }}</div>
+        <div class="text-xs text-gray-400 mt-1">{{ c.createdAt | date:'short' }}</div>
+      </div>
+    </div>
+
+    <div class="mt-4 flex gap-2">
+      <input [(ngModel)]="newComment" class="flex-1 px-3 py-2 border rounded" placeholder="Write a comment..." />
+      <button (click)="addComment()" class="bg-indigo-600 text-white px-4 py-2 rounded">Send</button>
+    </div>
+  </section>
+</div> -->
+
+<div [ngClass]="{
+        'fixed top-0 left-0 z-50 h-screen transition-transform duration-300': true,
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+        'translate-x-0': isSidebarOpen
+      }" [style.width.px]="isSidebarOpen ? 240 : 56" class="bg-white dark:bg-gray-800 shadow-lg">
+    <app-sidestudent [collapsed]="!isSidebarOpen"></app-sidestudent>
+</div>
+
+<section class="">
+
+    <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+    <main [ngStyle]="{'margin-left.px': isSidebarOpen && !isMobile() ? 240 : 56}"
+          class="flex flex-col transition-all duration-300 overflow-auto min-h-screen">
+
+        <app-user-header [isDarkMode]="isDarkMode" 
+                         (toggleSidebarEvent)="toggleSidebar()"
+                         (toggleDarkModeEvent)="toggleDarkMode()">
+        </app-user-header>
+<div class="min-h-screen bg-gray-100 p-4 md:p-6">
+  <div class="max-w-4xl mx-auto">
+    
+    <!-- Post Details Card -->
+    <!-- <article class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 mb-6"> -->
+      
+      <!-- User Info Header -->
+      <!-- <div class="flex items-center gap-4 mb-4"> -->
+        <!-- Profile Picture or Initial -->
+        <!-- <div class="relative">
+          <div *ngIf="post?.user?.profilePic; else postInitials" class="h-12 w-12 rounded-full overflow-hidden border-2 border-gray-200">
+            <img [src]="post.user.profilePic" alt="User profile" class="h-full w-full object-cover" />
+          </div>
+          <ng-template #postInitials>
+            <div class="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg border-2 border-gray-200">
+              {{ post?.user?.fname?.charAt(0)?.toUpperCase() || '?' }}
+            </div>
+          </ng-template>
+        </div> -->
+        
+        <!-- User Name and Date -->
+        <!-- <div class="flex-1">
+          <h3 class="font-semibold text-gray-900 text-lg">
+            {{ post?.user?.fname || 'Unknown' }} {{ post?.user?.lname || '' }}
+          </h3>
+          <p class="text-sm text-gray-500">{{ post?.createdAt | date:'mediumDate' }} at {{ post?.createdAt | date:'shortTime' }}</p>
+        </div> -->
+        
+        <!-- Options Menu -->
+        <!-- <button class="text-gray-400 hover:text-gray-600">
+          ⋯
+        </button>
+      </div> -->
+
+      <!-- Post Content -->
+      <!-- <div class="text-gray-800 mb-4 leading-relaxed">
+        <h2 class="text-xl font-bold mb-2">Post #{{ post?.postId }}</h2>
+        <p>{{ post?.content }}</p>
+      </div> -->
+
+      <!-- Media (if any) -->
+      <!-- <div *ngIf="post?.medias?.length" class="mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+          <img *ngFor="let m of post.medias" [src]="m.mediaUrl" alt="Post media" 
+               class="w-full h-48 object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow" />
+        </div>
+      </div> -->
+
+      <!-- Post Meta: Skill, Likes, Comments -->
+      <!-- <div class="flex items-center justify-between text-sm text-gray-600 mb-4 border-t pt-4">
+        <span *ngIf="post?.skillName" class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full font-medium">
+          {{ post.skillName }}
+        </span>
+        <div class="flex gap-4">
+          <span class="flex items-center gap-1">
+            <span class="text-red-500">❤️</span> {{ likes.length }} Likes
+          </span>
+          <span class="flex items-center gap-1">
+            <span class="text-blue-500">💬</span> {{ post?.totalComments ?? comments.length }} Comments
+          </span>
+        </div>
+      </div> -->
+
+      <!-- Action Buttons -->
+      <!-- <div class="flex gap-4 border-t pt-4">
+        <button (click)="toggleLike()" 
+                class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 {{ likedByUser ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'text-gray-600 hover:text-red-500 hover:bg-red-50' }}">
+          <span>{{ likedByUser ? '❤️' : '👍' }}</span> {{ likedByUser ? 'Unlike' : 'Like' }}
+        </button>
+        <button class="flex items-center gap-2 text-gray-600 hover:text-blue-500 hover:bg-blue-50 px-4 py-2 rounded-lg transition duration-200">
+          <span>💬</span> Comment
+        </button>
+        <button class="flex items-center gap-2 text-gray-600 hover:text-green-500 hover:bg-green-50 px-4 py-2 rounded-lg transition duration-200">
+          <span>🔗</span> Share
+        </button>
+      </div>
+    </article> -->
+
+    <!-- Comments Section -->
+    <!-- <section class="bg-white rounded-xl shadow-md p-6">
+      <h3 class="text-xl font-bold mb-4 text-gray-800">Comments</h3>
+
+      <div class="space-y-4 mb-6" *ngIf="comments.length > 0; else noComments">
+        <div *ngFor="let c of comments" class="flex gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+          <div class="flex-shrink-0">
+            <div *ngIf="c.userProfilePic; else commentInitials" class="h-8 w-8 rounded-full overflow-hidden"> 
+               <img [src]="c.userProfilePic" alt="Commenter" class="h-full w-full object-cover" />
+            </div>
+            <ng-template #commentInitials>
+              <div class="h-8 w-8 rounded-full bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                {{ c.userName?.charAt(0)?.toUpperCase() || '?' }}
+              </div>
+            </ng-template>
+          </div>
+          
+          <div class="flex-1">
+            <div class="font-semibold text-gray-900 text-sm">{{ c.userName || 'Anonymous' }}</div>
+            <div class="text-gray-800">{{ c.commentText }}</div>
+            <div class="text-xs text-gray-500 mt-1">{{ c.createdAt | date:'short' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noComments>
+        <p class="text-gray-500 text-center py-4">No comments yet. Be the first to comment!</p>
+      </ng-template>
+
+      <div class="flex gap-3 border-t pt-4">
+        <input [(ngModel)]="newComment" 
+               class="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+               placeholder="Write a comment..." />
+        <button (click)="addComment()" 
+                class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition duration-200">
+          Send
+        </button>
+      </div>
+    </section> 
+ -->
+
+
+
+
+
+
+
+
+
+
+
+    <div class="rounded-lg bg-card text-card-foreground shadow-sm hover:shadow-2xl transition-all border-2 hover:border-primary/50 bg-gradient-to-br from-card via-card to-primary/5">
+
+  <div class="p-6 space-y-4">
+
+    <!-- Header -->
+    <div class="flex items-center gap-3">
+      <!-- <span class="relative flex shrink-0 overflow-hidden rounded-full h-12 w-12 ring-2 ring-primary/20">
+        <img
+          class="aspect-square h-full w-full"
+          src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmed" />
+      </span> -->
+<span class="relative flex shrink-0 overflow-hidden rounded-full h-12 w-12 ring-2 ring-primary/20">
+  <img 
+    *ngIf="post.user?.profilePic" 
+    class="aspect-square h-full w-full" 
+    [src]="post.user?.profilePic" 
+    alt="User Avatar"
+  >
+  <div 
+    *ngIf="!post.user?.profilePic" 
+    class="aspect-square h-full w-full bg-blue-100 flex items-center justify-center text-white font-bold text-lg rounded-full"
+  >
+    {{ (post.user?.fname || 'U')[0].toUpperCase() }}
+  </div>
+</span>
+
+
+
+
+
+      <app-make-report></app-make-report>
+      <!-- button for  report TEST -->
+    <!-- <button (click)="makeReport.open('user', 2, 7)" class="bg-blue-500 text-white px-4 py-2 rounded">
+      Report User
+    </button> -->
+
+      <div class="flex-1 min-w-0">
+        <!-- <p class="font-semibold text-sm">  {{ post?.user?.fname || 'Unknown' }} {{ post?.user?.lname || '' }}</p> -->
+         <a 
+  [routerLink]="post.user?.userId === currentUserId ? ['/myprofile'] : ['/user', post.user?.userId] "
+
+  [class.no-click]="post.user?.userId === currentUserId"
+  class="font-semibold text-sm text-black-600"
+>
+  {{ post.user?.fname || 'Unknown' }} {{ post.user?.lname || '' }}
+</a>
+
+        <p class="text-xs text-muted-foreground">{{ post?.createdAt | date:'mediumDate' }} at {{ post?.createdAt | date:'shortTime' }}</p>
+      </div>
+
+      <div
+        class="inline-flex items-center border px-2.5 py-0.5 text-xs font-semibold transition-colors
+               focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent
+               bg-secondary text-secondary-foreground hover:bg-secondary/80 shrink-0 rounded-full">
+         {{ post.skillName }}
+      </div>
+    </div>
+
+    <!-- Post content -->
+    <p class="text-sm leading-relaxed">
+      {{ post?.content }}
+    </p>
+
+     <!-- Media (if any) -->
+      <div *ngIf="post?.medias?.length" class="mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+          <img *ngFor="let m of post.medias" src="images/photo_5886497488468905056_x.jpg" alt="Post media" 
+               class="w-full h-48 object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow" />
+        </div>
+      </div>
+
+    <div data-orientation="horizontal" role="none" class="shrink-0 bg-border h-[1px] w-full"></div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-4">
+
+      <!-- Like Button -->
+      <button (click)="toggleLike()"
+      [ngClass]="likedByUser
+          ? 'bg-blue-600 text-white hover:bg-blue-700'
+          : 'border border-input bg-background hover:bg-accent hover:text-accent-foreground'"
+
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium
+               ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2
+               focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none
+               disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0
+               border border-input bg-background hover:bg-accent hover:text-accent-foreground
+               h-9 px-3 rounded-full">
+        <svg
+          xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-thumbs-up h-4 w-4 mr-2">
+          <path d="M7 10v12"></path>
+          <path
+            d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z">
+          </path>
+        </svg>
+       {{ post?.totalLiked ?? likes.length }}
+      </button>
+
+      <!-- Comments Count -->
+      <div class="flex items-center gap-2 text-sm text-muted-foreground">
+        <svg
+          xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-message-square h-4 w-4">
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z">
+          </path>
+        </svg>
+        {{ post?.totalComments ?? comments.length }}
+      </div>
+
+    </div>
+
+    <!-- Comments -->
+    <div class="space-y-3 pt-2">
+
+      <!-- Comment 1 -->
+
+       <div class="space-y-4 mb-6" *ngIf="comments.length > 0; else noComments">
+      <div *ngFor="let c of comments" class="">
+
+
+      <div class="flex gap-2 p-3 bg-muted/50 rounded-lg">
+        <!-- <span class="relative flex shrink-0 overflow-hidden rounded-full h-8 w-8">
+          <img
+            class="aspect-square h-full w-full"
+            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" />
+        </span> -->
+        <span class="relative flex shrink-0 overflow-hidden rounded-full h-12 w-12 ring-2 ring-primary/20">
+        <img 
+          *ngIf="post.user?.profilePic" 
+          class="aspect-square h-full w-full" 
+          [src]="post.user?.profilePic" 
+          alt="User Avatar"
+        >
+        <div 
+          *ngIf="!post.user?.profilePic" 
+          class="aspect-square h-full w-full bg-blue-100 flex items-center justify-center text-white font-bold text-lg rounded-full"
+        >
+          {{ (post.user?.fname || 'U')[0].toUpperCase() }}
+        </div>
+      </span>
+
+        <div class="flex-1 space-y-1">
+          <p class="font-medium text-xs">{{ c.userName || 'Anonymous' }}</p>
+          <p class="text-xs text-muted-foreground">
+           {{ c.commentText }}
+          </p>
+          <!-- <div class="text-xs text-gray-500 mt-1">{{ c.createdAt | date:'short' }}</div> -->
+
+        </div>
+      </div>
+       </div>
+       </div>
+         <ng-template #noComments>
+        <p class="text-gray-500 text-center py-4">No comments yet. Be the first to comment!</p>
+        </ng-template>
+
+    </div>
+
+    <!-- Add Comment -->
+    <div class="flex gap-2 pt-2">
+      <textarea [(ngModel)]="newComment"
+        class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm
+               ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none
+               focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+               disabled:cursor-not-allowed disabled:opacity-50 min-h-[60px] resize-none"
+        placeholder="Write a comment..." rows="2"></textarea>
+
+      <button (click)="addComment()"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium
+               ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2
+               focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none
+               disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0
+               bg-primary text-primary-foreground hover:bg-primary/90 shrink-0 h-[60px] w-[60px]
+               rounded-full"
+        >
+        <svg
+          xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-send h-4 w-4">
+          <path
+            d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z">
+          </path>
+          <path d="m21.854 2.147-10.94 10.939"></path>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+    
+  </div>
+</div>
+
+
+
+
+ <!-- Profile Picture or Initial -->
+        <!-- <div class="relative">
+          <div *ngIf="post?.user?.profilePic; else postInitials" class="h-12 w-12 rounded-full overflow-hidden border-2 border-gray-200">
+            <img [src]="post.user.profilePic" alt="User profile" class="h-full w-full object-cover" />
+          </div>
+          <ng-template #postInitials>
+            <div class="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg border-2 border-gray-200">
+              {{ post?.user?.fname?.charAt(0)?.toUpperCase() || '?' }}
+            </div>
+          </ng-template>
+        </div> -->
+
+
+
+        <!-- Options Menu -->
+        <!-- <button class="text-gray-400 hover:text-gray-600">
+          ⋯
+        </button> -->
+
+
+
+
+
+
+        <!-- <button (click)="toggleLike()" 
+                class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 {{ likedByUser ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'text-gray-600 hover:text-red-500 hover:bg-red-50' }}">
+          <span>{{ likedByUser ? '❤️' : '👍' }}</span> {{ likedByUser ? 'Unlike' : 'Like' }}
+        </button> -->
+
+      </main>

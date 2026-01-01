@@ -1,0 +1,131 @@
+
+<div [ngClass]="{
+        'fixed top-0 left-0 z-50 h-screen  transition-transform duration-300': true,
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+        'translate-x-0': isSidebarOpen
+      }" [style.width.px]="isSidebarOpen ? 240 : 56" class="bg-white dark:bg-gray-800 shadow-lg">
+    <app-sidestudent [collapsed]="!isSidebarOpen"></app-sidestudent>
+</div>
+
+<div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40 dark:bg-gray-800" (click)="toggleSidebar()"></div>
+
+<main [ngStyle]="{'margin-left.px': isSidebarOpen && !isMobile() ? 240 : 56}"
+    class="flex flex-col transition-all duration-300 overflow-auto min-h-screen dark:bg-gray-800">
+    <app-user-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+        (toggleDarkModeEvent)="toggleDarkMode()"></app-user-header>
+<div class="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-xl mt-10 dark:bg-gray-700">
+  <h2 class="text-3xl font-bold mb-6 text-gray-800 text-center">{{tr('Create New Session')}}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-5">
+
+    <!-- Title -->
+    <div>
+      <label class="block font-semibold mb-2 text-gray-700">{{tr('Session Title')}}</label>
+      <input type="text" formControlName="sessionTitle" placeholder="Enter session title"
+        [ngClass]="{
+          'border-red-500': form.get('sessionTitle')?.invalid && form.get('sessionTitle')?.touched,
+          'border-gray-300': !(form.get('sessionTitle')?.invalid && form.get('sessionTitle')?.touched)
+        }"
+        class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <p class="text-red-600 text-sm mt-1"
+        *ngIf="form.get('sessionTitle')?.invalid && form.get('sessionTitle')?.touched">
+        {{tr('Session title is required')}}
+      </p>
+    </div>
+
+    <!-- Learner -->
+    <div>
+      <label class="block font-semibold mb-2 text-gray-700">{{tr('Learner')}}</label>
+      <select formControlName="learnerId"
+        [ngClass]="{
+          'border-red-500': form.get('learnerId')?.invalid && form.get('learnerId')?.touched,
+          'border-gray-300': !(form.get('learnerId')?.invalid && form.get('learnerId')?.touched)
+        }"
+        class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-white">
+        <option value="" disabled>{{tr('Select a learner')}}</option>
+        <option *ngFor="let l of learners" [value]="l.userId">{{ l.fullName }}</option>
+      </select>
+      <p class="text-red-600 text-sm mt-1"
+        *ngIf="form.get('learnerId')?.invalid && form.get('learnerId')?.touched">
+        {{tr('Please select a learner')}}
+      </p>
+    </div>
+
+    <!-- Skill -->
+    <div>
+      <label class="block font-semibold mb-2 text-gray-700">{{tr('Skill')}}</label>
+      <select formControlName="skillId"
+        [ngClass]="{
+          'border-red-500': form.get('skillId')?.invalid && form.get('skillId')?.touched,
+          'border-gray-300': !(form.get('skillId')?.invalid && form.get('skillId')?.touched)
+        }"
+        class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-white">
+        <option value="" disabled>{{tr('Select a skill')}}</option>
+        <option *ngFor="let s of skills" [value]="s.skillId">{{ s.name }}</option>
+      </select>
+      <p class="text-red-600 text-sm mt-1"
+        *ngIf="form.get('skillId')?.invalid && form.get('skillId')?.touched">
+        {{tr('Please select a skill')}}
+      </p>
+    </div>
+
+    <!-- Schedule -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <!-- Start Time -->
+      <div>
+        <label class="block font-semibold mb-2 text-gray-700">{{tr('Start Time')}}</label>
+        <input type="datetime-local" formControlName="scheduleStart" [min]="minDateTime"
+          [ngClass]="{
+            'border-red-500': form.get('scheduleStart')?.invalid && form.get('scheduleStart')?.touched || isStartInPast,
+            'border-gray-300': !(form.get('scheduleStart')?.invalid && form.get('scheduleStart')?.touched || isStartInPast)
+          }"
+          class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <p class="text-red-600 text-sm mt-1" *ngIf="form.get('scheduleStart')?.invalid && form.get('scheduleStart')?.touched">
+          {{tr('Start time is required')}}
+        </p>
+        <p class="text-red-600 text-sm mt-1" *ngIf="isStartInPast">
+          {{tr('Start time cannot be in the past')}}
+        </p>
+      </div>
+
+      <!-- End Time -->
+      <div>
+        <label class="block font-semibold mb-2 text-gray-700">{{tr('End Time')}}</label>
+        <input type="datetime-local" formControlName="scheduleEnd" [min]="form.value.scheduleStart || minDateTime"
+          [ngClass]="{
+            'border-red-500': form.get('scheduleEnd')?.invalid && form.get('scheduleEnd')?.touched || isEndBeforeStart,
+            'border-gray-300': !(form.get('scheduleEnd')?.invalid && form.get('scheduleEnd')?.touched || isEndBeforeStart)
+          }"
+          class="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <p class="text-red-600 text-sm mt-1" *ngIf="form.get('scheduleEnd')?.invalid && form.get('scheduleEnd')?.touched">
+          {{tr('End time is required')}}
+        </p>
+        <p class="text-red-600 text-sm mt-1" *ngIf="isEndBeforeStart">
+          {{tr('End time cannot be earlier than start time')}}
+        </p>
+      </div>
+
+    </div>
+   
+<!-- Conflict Message -->
+    <div *ngIf="conflictMessage" class="text-red-600 mb-2 text-center">
+  {{ conflictMessage }}
+</div>
+
+    <!-- Buttons -->
+    <div class="text-center mt-4 flex justify-center gap-2">
+      <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-200">
+        {{tr('Create Session')}}
+      </button>
+      <button type="button" (click)="cancel()"
+        class="bg-red-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-red-700 transition duration-200">
+        {{tr('Cancel')}}
+      </button>
+    </div>
+
+  </form>
+</div>
+
+</main>
+

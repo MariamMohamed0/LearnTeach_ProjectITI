@@ -1,0 +1,13 @@
+# Backend (.NET)
+backend/bin/
+backend/obj/
+backend/.vs/
+backend/appsettings.Development.json
+
+# Frontend (Angular)
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# Common
+.env

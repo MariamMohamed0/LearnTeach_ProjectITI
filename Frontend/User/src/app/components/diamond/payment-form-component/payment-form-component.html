@@ -1,0 +1,115 @@
+<div [ngClass]="{
+        'fixed top-0 left-0 z-50 h-screen  transition-transform duration-300': true,
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+        'translate-x-0': isSidebarOpen
+      }" [style.width.px]="isSidebarOpen ? 240 : 56" class="bg-white dark:bg-gray-800 shadow-lg">
+    <app-sidestudent [collapsed]="!isSidebarOpen"></app-sidestudent>
+</div>
+
+<section class="myprofile">
+    <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+    <main [ngStyle]="{'margin-left.px': isSidebarOpen && !isMobile() ? 240 : 56}"
+        class="flex flex-col transition-all duration-300 overflow-auto min-h-screen">
+        <app-user-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+            (toggleDarkModeEvent)="toggleDarkMode()"></app-user-header>
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md p-6 animate-fadeIn">
+
+                <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-4">
+                    {{ tr('PURCHASE_DIAMONDS') }}
+                </h2>
+
+                <p class="text-center text-gray-700 dark:text-gray-300 mb-6">
+                    {{ diamonds }} {{ tr('DIAMONDS') }} — {{ priceEGP }} {{ tr('CURRENCY_EGP') }}
+                </p>
+
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                        {{ tr('SELECT_CARD_TYPE') }}
+                    </label>
+                    <div class="flex space-x-4">
+                        <button (click)="cardType='Visa'" [class.bg-blue-700]="cardType==='Visa'"
+                            class="w-1/2 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-blue-600 hover:text-white transition">
+                            {{ tr('VISA') }}
+                        </button>
+                        <button (click)="cardType='Mastercard'" [class.bg-blue-700]="cardType==='Mastercard'"
+                            class="w-1/2 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-blue-600 hover:text-white transition">
+                            {{ tr('MASTERCARD') }}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-4 mb-4">
+
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-1">
+                            {{ tr('CARD_NUMBER') }}
+                        </label>
+                        <input [(ngModel)]="cardNumber" type="text" placeholder="1234 5678 9012 3456"
+                            class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg" />
+                        <p *ngIf="errors.cardNumber" class="text-red-600 text-sm mt-1">{{ errors.cardNumber }}</p>
+                    </div>
+
+
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-1">
+                            {{ tr('CARD_HOLDER') }}
+                        </label>
+                        <input [(ngModel)]="cardHolder" type="text" placeholder="John Doe"
+                            class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg" />
+                        <p *ngIf="errors.cardHolder" class="text-red-600 text-sm mt-1">{{ errors.cardHolder }}</p>
+                    </div>
+
+
+                    <div class="flex space-x-4">
+                        <div class="w-1/2">
+                            <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-1">
+                                {{ tr('EXPIRY') }}
+                            </label>
+                            <input [(ngModel)]="expiry" type="text" placeholder="MM/YY"
+                                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg" />
+                            <p *ngIf="errors.expiry" class="text-red-600 text-sm mt-1">{{ errors.expiry }}</p>
+                        </div>
+                        <div class="w-1/2">
+                            <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-1">
+                                {{ tr('CVV') }}
+                            </label>
+                            <input [(ngModel)]="cvv" type="password" placeholder="123"
+                                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg" />
+                            <p *ngIf="errors.cvv" class="text-red-600 text-sm mt-1">{{ errors.cvv }}</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mb-4 text-center text-red-600" *ngIf="errorMessage">{{ errorMessage }}</div>
+                <div class="mb-4 text-center text-green-600" *ngIf="successMessage">{{ successMessage }}</div>
+
+                <button (click)="purchase()" [disabled]="loading || purchaseInProgress"
+                    class="w-full bg-blue-700 hover:bg-blue-800 text-white py-3 rounded-xl font-semibold shadow-md transition">
+                    {{ loading ? tr('PROCESSING') : tr('PURCHASE') }}
+                </button>
+
+            </div>
+        </div>
+    </main>
+</section>
+<style>
+    .animate-fadeIn {
+        animation: fadeIn 0.35s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

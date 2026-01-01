@@ -1,0 +1,177 @@
+<div [ngClass]="{
+        'fixed top-0 left-0 z-50 h-screen  transition-transform duration-300': true,
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+        'translate-x-0': isSidebarOpen
+      }" [style.width.px]="isSidebarOpen ? 240 : 56" class="bg-white dark:bg-gray-800 shadow-lg">
+    <app-sidestudent [collapsed]="!isSidebarOpen"></app-sidestudent>
+</div>
+
+<section class="myprofile">
+    <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+    <main [ngStyle]="{'margin-left.px': isSidebarOpen && !isMobile() ? 240 : 56}"
+        class="flex flex-col transition-all duration-300 overflow-auto min-h-screen">
+        <app-user-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+            (toggleDarkModeEvent)="toggleDarkMode()"></app-user-header>
+
+
+        <div class="flex justify-center items-center w-full min-h-screen p-4 sm:p-6">
+            <div class="w-full max-w-5xl bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6
+              border border-gray-200 dark:border-gray-700 z-10 transition-colors duration-500">
+
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-center mt-8 mb-6 border-b-4 border-blue-600 dark:border-blue-500 pb-3
+             transition-colors duration-500">
+                    {{ tr('PREMIUM') }}
+                </h2>
+
+                <!-- اشتراك المستخدم الحالي -->
+                <div *ngIf="userPackages.length > 0" class="mb-8">
+
+                    <h3 class="text-xl sm:text-2xl md:text-2xl font-bold 
+           text-gray-900 dark:text-gray-100 
+           transition-colors duration-500 ease-in-out 
+           text-left ml-12 mb-4">
+                        {{ tr('YOUR_CURRENT_SUBSCRIPTION') }}
+                    </h3>
+
+
+
+                    <div class="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-4">
+
+                        <div *ngFor="let pkg of userPackages" class="premium-card relative overflow-hidden w-full sm:w-60 md:w-64 lg:w-72
+                    py-4 px-3 bg-white dark:bg-gray-800 shadow-md border border-gray-200 dark:border-gray-700
+                    rounded-2xl transform transition-all duration-300 hover:scale-105 hover:shadow-lg
+                    flex flex-col justify-between">
+
+                            <!-- ديكور Blob -->
+                            <div
+                                class="blob-shape absolute -top-10 -right-10 w-32 h-32 bg-blue-400/10 rounded-full blur-3xl">
+                            </div>
+                            <div
+                                class="blob-shape absolute -bottom-10 -left-10 w-32 h-32 bg-purple-400/10 rounded-full blur-3xl">
+                            </div>
+
+                            <!-- اسم الباقة -->
+                            <p class="text-lg font-bold text-gray-900 dark:text-white">
+                                {{ pkg.packageName }} – {{ convertToEGP(pkg.packagePrice) }} EGP
+                            </p>
+
+                            <!-- الدائرة -->
+                            <div class="flex justify-center mt-4">
+                                <div class="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28">
+                                    <svg class="transform -rotate-90" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="45" stroke="gray" stroke-width="10"
+                                            class="opacity-20"></circle>
+                                        <circle cx="50" cy="50" r="45" stroke-width="10" fill="none"
+                                            stroke-linecap="round" class="transition-all duration-700"
+                                            [attr.stroke]="getProgressColor(daysLeftFromDuration(pkg.startDate,pkg.packageDuration))"
+                                            [attr.stroke-dasharray]="'282.6'"
+                                            [attr.stroke-dashoffset]="getProgressOffset(pkg)">
+                                        </circle>
+                                    </svg>
+
+                                    <div class="absolute inset-0 flex items-center justify-center text-base sm:text-lg md:text-xl font-bold"
+                                        [ngStyle]="{ 'color': getProgressColor(daysLeftFromDuration(pkg.startDate, pkg.packageDuration)) }">
+                                        {{ daysLeftFromDuration(pkg.startDate, pkg.packageDuration) }}
+
+                                    </div>
+
+                                </div>
+                                <p class="text-center font-bold text-gray-900 dark:text-gray-100 mt-[35px] ml-4">
+                                    {{tr('DAYS_LEFT') }}
+
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="my-5"></div>
+
+
+                <!-- كل الباقات / البطاقات الصغيرة -->
+                <div *ngIf="userPackages.length === 0"
+                    class="flex justify-center items-start bg-gray-50 dark:bg-gray-900 px-8 py-6">
+
+                    <!-- الكارد الخارجي -->
+                    <div
+                        class="w-full max-w-6xl bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 border border-gray-200 dark:border-gray-700">
+
+                        <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-center
+ text-gray-900 dark:text-gray-100 
+ transition-colors duration-500 ease-in-out mb-4">
+                            {{ tr('Premium_offers') }}
+                        </h3>
+
+                        <!-- شبكة الباقات الداخلية -->
+                        <div class="flex flex-wrap justify-center gap-6">
+
+                            <div *ngFor="let pkg of allPackages" (click)="selectPackage(pkg)" class="flex flex-col justify-between p-4 rounded-2xl shadow-md cursor-pointer
+              bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600
+              transform transition-all duration-300 hover:scale-105 hover:shadow-lg
+              w-60">
+
+                                <div class="text-center mb-3">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                                        {{ pkg.packageName }}
+                                    </h3>
+                                    <p class="text-gray-700 dark:text-gray-300 text-sm">
+                                        {{ pkg.diamondPoints }} {{ tr('DIAMONDS') }} | {{ pkg.packageDuration }} {{
+                                        tr('PACKAGE_DURATION') }}
+                                    </p>
+                                </div>
+
+                                <div class="space-y-1 mt-2">
+                                    <div *ngFor="let detail of pkg.packageDetails.split(' - ')"
+                                        class="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 text-xs rounded-lg px-2 py-1 shadow-sm text-center">
+                                        {{ detail }}
+                                    </div>
+                                </div>
+
+                                <button class="mt-3 w-full py-2 bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700
+                   text-white rounded-xl font-medium text-sm border border-blue-500 dark:border-blue-600
+                   shadow-sm hover:shadow-md transition-all duration-300">
+                                    {{ tr('BUY_NOW') }} - {{ convertToEGP(pkg.packagePrice) }} EGP
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</section>
+<style>
+    .animate-fadeIn {
+        animation: fadeIn 0.35s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+
+    .premium-card {
+        border-radius: 28px 20px 35px 20px;
+        /* شكل ناعم مش مربع */
+        transition: 0.3s ease;
+    }
+
+    .premium-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    }
+</style>

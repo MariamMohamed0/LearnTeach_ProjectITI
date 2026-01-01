@@ -1,0 +1,134 @@
+<section class="flex w-full min-h-screen bg-gray-50 dark:bg-gray-900 ">
+  <div [ngClass]="{
+        'fixed inset-0 z-50 transform transition-transform duration-300': isMobile(),
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+
+        'w-7': !isSidebarOpen && !isMobile(),
+        'w-60': isSidebarOpen || isMobile()
+      }" class="bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 flex-shrink-0">
+    <app-sidebar [collapsed]="!isSidebarOpen"></app-sidebar>
+  </div>
+
+  <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+  <main [ngClass]="{
+      'ml-0 w-full': isMobile(),
+      'ml-9 w-[calc(100%-2rem)]': !isSidebarOpen && !isMobile(),   
+      'ml-5 w-[calc(100%-14rem)]': isSidebarOpen && !isMobile()   
+    }" class="flex flex-col transition-all duration-300  overflow-auto">
+
+    <app-admin-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+      (toggleDarkModeEvent)="toggleDarkMode()">
+    </app-admin-header>
+<div class="max-w-6xl mx-auto p-6" *ngIf="!loading">
+
+  <!-- Title -->
+  <h2 class="text-3xl font-bold mb-6 text-blue-600">{{tr('National ID Details')}}</h2>
+
+  <!-- User Card -->
+  <div class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-gray-200  dark:bg-gray-800">
+    <h4 class="text-xl font-semibold text-gray-800 mb-2">
+      {{tr('User:')}} <span class="font-bold text-blue-700">{{ data.userName }}</span>
+    </h4>
+
+    <p class="text-gray-700 mb-2 flex items-center gap-2">
+      {{tr('Status:')}}
+      <span
+        class="px-3 py-1 rounded-full text-sm font-semibold"
+        [ngClass]="{
+          'bg-yellow-200 text-yellow-800': data.verificationStatus == 'Pending',
+          'bg-green-200 text-green-800': data.verificationStatus == 'Approved',
+          'bg-red-200 text-red-800': data.verificationStatus == 'Rejected'
+        }"
+      >
+        {{ data.verificationStatus }}
+      </span>
+    </p>
+
+    <p class="text-gray-600">
+     {{tr(' Submitted At:')}}
+      <span class="font-medium text-gray-800">
+        {{ data.submittedAt | date : 'short' }}
+      </span>
+    </p>
+  </div>
+
+  <!-- Images -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <!-- Front -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 dark:bg-gray-800">
+      <img [src]="data.frontPic" class="w-full h-56 object-cover" alt="Front ID" />
+      <div class="text-center p-3 font-semibold text-gray-700">{{tr('Front Side')}}</div>
+    </div>
+
+    <!-- Back -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200  dark:bg-gray-800">
+      <img [src]="data.backPic" class="w-full h-56 object-cover" alt="Back ID" />
+      <div class="text-center p-3 font-semibold text-gray-700">{{tr('Back Side')}}</div>
+    </div>
+
+    <!-- Selfie -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200  dark:bg-gray-800">
+      <img [src]="data.selfieWithId" class="w-full h-56 object-cover" alt="Selfie" />
+      <div class="text-center p-3 font-semibold text-gray-700">{{tr('Selfie with ID')}}</div>
+    </div>
+
+  </div>
+
+  <!-- Buttons -->
+  <div class="mt-6 flex flex-wrap gap-4">
+    <button
+      class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow"
+      (click)="approve()"
+    >
+      {{tr('Approve')}}
+    </button>
+
+    <button
+      class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow"
+      (click)="showRejectBox = !showRejectBox"
+    >
+      {{tr('Reject')}}
+    </button>
+
+    <!-- <button
+      class="px-5 py-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg shadow"
+      (click)="delete()"
+    >
+      {{tr('Delete')}}
+    </button> -->
+
+     <button
+    class="px-5 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow"
+    (click)="cancel()"
+  >
+    {{tr('Cancel')}}
+  </button>
+  </div>
+
+  <!-- Reject Box -->
+  <div *ngIf="showRejectBox" class="mt-6 bg-white p-5 rounded-xl shadow border border-gray-200">
+    <textarea
+      class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-red-400 outline-none"
+      rows="3"
+      placeholder="Enter rejection reason..."
+      [(ngModel)]="rejectReason"
+    ></textarea>
+
+    <button
+      class="mt-3 px-5 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow"
+      (click)="reject()"
+    >
+      {{tr('Submit Rejection')}}
+    </button>
+  </div>
+
+</div>
+
+<!-- Loading -->
+<div class="text-center mt-10" *ngIf="loading">
+  <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+</div>
+</main>
+</section>

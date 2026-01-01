@@ -1,0 +1,46 @@
+.reports-container {
+    padding: 20px;
+  }
+  
+  .tabs button {
+    margin-right: 10px;
+    padding: 5px 15px;
+  }
+  
+  .tabs button.active {
+    font-weight: bold;
+    border-bottom: 2px solid #333;
+  }
+  
+  .reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .reports-table th, .reports-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+  }
+  
+  .dialog-backdrop {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .dialog {
+    background: white;
+    padding: 20px;
+    border-radius: 6px;
+    width: 300px;
+  }
+  
+  .dialog button {
+    margin-top: 10px;
+    margin-right: 5px;
+  }
+  

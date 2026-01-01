@@ -1,0 +1,66 @@
+<section id="contact" class="contact my-16 px-6">
+    <h2 class="text-3xl font-bold text-center mb-10 text-blue-700">{{ tr('Contact Us') }}</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto bg-blue-50">
+        <div class="border-2 border-blue-500 rounded-xl p-8 shadow hover:shadow-lg transition">
+            <form class="space-y-4">
+                <div>
+                    <label class="block text-left font-medium text-gray-700 mb-2 text-xl"  [ngClass]="{'text-right': t.getCurrentLanguage() === 'ar'}">{{ tr('Name') }}</label>
+                    <input type="text" placeholder="{{ tr('Enter your name') }}"
+                        class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-left font-medium text-gray-700 mb-2 text-xl"[ngClass]="{'text-right': t.getCurrentLanguage() === 'ar'}">{{ tr('Email') }}</label>
+                    <input type="email" placeholder="{{ tr('Enter your email') }}"
+                        class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-left font-medium text-gray-700 mb-2 text-xl"[ngClass]="{'text-right': t.getCurrentLanguage() === 'ar'}">{{ tr('Message') }}</label>
+                    <textarea rows="4" placeholder="{{ tr('Write your message...') }}"
+                        class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition w-full">
+                    {{ tr('Send Message') }}
+                </button>
+            </form>
+        </div>
+
+        <div
+            class="border-2 border-blue-500 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition bg-blue-50 flex flex-col justify-center">
+            <h3 class="text-2xl font-bold text-blue-700 mb-8 text-center">{{ tr('Get in Touch') }}</h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
+
+                <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition flex flex-col items-center">
+                    <div class="bg-blue-100 text-blue-600 p-4 rounded-full mb-3">
+                        <i class="fa-solid fa-phone text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800">{{ tr('Phone') }}</h4>
+                    <p class="text-gray-600 mt-1 phone-number">+20 158 937 5465</p>
+
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition flex flex-col items-center">
+                    <div class="bg-blue-100 text-blue-600 p-4 rounded-full mb-3">
+                        <i class="fa-solid fa-envelope text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800">{{ tr('Email') }}</h4>
+                    <p class="text-gray-600 mt-1">info@gmail.com</p>
+                </div>
+
+                <div
+                    class="bg-white rounded-xl p-6 shadow hover:shadow-md transition flex flex-col items-center sm:col-span-2">
+                    <div class="bg-blue-100 text-blue-600 p-4 rounded-full mb-3">
+                        <i class="fa-solid fa-clock text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800">{{ tr('Working Hours') }}</h4>
+                    <p class="text-gray-600 mt-1">{{ tr('Sunday – Thursday: 9 AM – 10 PM') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

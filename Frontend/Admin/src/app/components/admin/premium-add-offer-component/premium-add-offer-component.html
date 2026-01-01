@@ -1,0 +1,142 @@
+<section class="flex w-full min-h-screen bg-gray-50 dark:bg-gray-900 ">
+  <div [ngClass]="{
+        'fixed inset-0 z-50 transform transition-transform duration-300': isMobile(),
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+
+        'w-7': !isSidebarOpen && !isMobile(),
+        'w-60': isSidebarOpen || isMobile()
+      }" class="bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 flex-shrink-0">
+    <app-sidebar [collapsed]="!isSidebarOpen"></app-sidebar>
+  </div>
+
+  <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+  <main [ngClass]="{
+      'ml-0 w-full': isMobile(),
+      'ml-9 w-[calc(100%-2rem)]': !isSidebarOpen && !isMobile(),   
+      'ml-5 w-[calc(100%-14rem)]': isSidebarOpen && !isMobile()   
+    }" class="flex flex-col transition-all duration-300  overflow-auto">
+
+    <app-admin-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+      (toggleDarkModeEvent)="toggleDarkMode()">
+    </app-admin-header>
+
+        <!-- Title -->
+        <div class="flex justify-between items-center mb-6 mt-6 ml-2">
+            <h1 class="text-3xl text-center font-bold text-gray-900 dark:text-white 
+                 transition-transform duration-500 ease-out transform hover:translate-y-[-2px]">
+                {{ tr('Add New Offer') }}
+            </h1>
+        </div>
+
+        <div class="w-full max-w-4xl mx-auto px-3">
+            <form #addForm="ngForm" (ngSubmit)="createPackage(addForm)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Offer Name -->
+                <div class="col-span-2 md:col-span-1">
+                    <input type="text" name="packageName" required [(ngModel)]="newPackage.packageName"
+                        (input)="trimName()" (blur)="
+            newPackage.packageName = (newPackage.packageName || '').trim();
+            checkNameExists()
+        " minlength="2" pattern="^[A-Za-z][A-Za-z ]*|[A-Z][a-zA-Z ]*|[ء-ي]+$" placeholder="{{ tr('Offer Name') }}"
+                        class="w-full border rounded px-3 py-2 dark:bg-gray-700 dark:text-white" />
+
+                    <small *ngIf="addForm.submitted && addForm.controls['packageName']?.errors?.['required']"
+                        class="text-red-500">
+                        {{ tr('This field is required') }}
+                    </small>
+
+                    <small *ngIf="addForm.controls['packageName']?.errors?.['pattern']" class="text-red-500">
+                        {{ tr('Name must be Arabic or English with Capital first letter') }}
+                    </small>
+
+                    <small *ngIf="nameExists" class="text-red-500">
+                        {{ tr('This name already exists') }}
+                    </small>
+                </div>
+
+
+                <!-- Price -->
+                <div class="col-span-2 md:col-span-1">
+                    <input type="number" name="packagePrice" required [(ngModel)]="newPackage.packagePrice" min="1"
+                        max="1000" placeholder="{{ tr('Price (USD)') }}"
+                        class="w-full border rounded px-3 py-2 dark:bg-gray-700 dark:text-white" />
+
+                    <small *ngIf="addForm.submitted && addForm.controls['packagePrice']?.errors?.['required']"
+                        class="text-red-500">
+                        {{ tr('This field is required') }}
+                    </small>
+
+                    <small *ngIf="addForm.controls['packagePrice']?.errors?.['max']" class="text-red-500">
+                        {{ tr('Maximum price is 1000') }}
+                    </small>
+                </div>
+
+                <!-- Duration -->
+                <div class="col-span-2 md:col-span-1">
+                    <input type="number" name="packageDuration" required [(ngModel)]="newPackage.packageDuration"
+                        min="1" max="12" placeholder="{{ tr('Type / Duration (1-12)') }}"
+                        class="w-full border rounded px-3 py-2 dark:bg-gray-700 dark:text-white" />
+
+                    <small *ngIf="addForm.submitted && addForm.controls['packageDuration']?.errors?.['required']"
+                        class="text-red-500">
+                        {{ tr('This field is required') }}
+                    </small>
+
+                    <small *ngIf="addForm.controls['packageDuration']?.errors?.['max']" class="text-red-500">
+                        {{ tr('Maximum duration is 12') }}
+                    </small>
+
+                    <small *ngIf="addForm.controls['packageDuration']?.errors?.['min']" class="text-red-500">
+                        {{ tr('Minimum duration is 1') }}
+                    </small>
+                </div>
+
+                <!-- Diamond Points -->
+                <div class="col-span-2 md:col-span-1">
+                    <input type="number" name="diamondPoints" required [(ngModel)]="newPackage.diamondPoints" min="1"
+                        max="1000" placeholder="{{ tr('Diamond Points') }}"
+                        class="w-full border rounded px-3 py-2 dark:bg-gray-700 dark:text-white" />
+
+                    <small *ngIf="addForm.submitted && addForm.controls['diamondPoints']?.errors?.['required']"
+                        class="text-red-500">
+                        {{ tr('This field is required') }}
+                    </small>
+
+                    <small *ngIf="addForm.controls['diamondPoints']?.errors?.['max']" class="text-red-500">
+                        {{ tr('Maximum points is 1000') }}
+                    </small>
+                </div>
+
+                <!-- Features -->
+                <div class="col-span-2">
+                    <textarea name="packageDetails" [(ngModel)]="newPackage.packageDetails" maxlength="300"
+                        pattern="^[A-Za-zء-ي0-9 \-]*$" placeholder="{{ tr('Features (letters + dash - )') }}"
+                        class="w-full border rounded px-3 py-2 h-28 dark:bg-gray-700 dark:text-white">
+        </textarea>
+
+                    <small *ngIf="addForm.controls['packageDetails']?.errors?.['maxlength']" class="text-red-500">
+                        {{ tr('Maximum length is 300 characters') }}
+                    </small>
+
+                    <small *ngIf="addForm.controls['packageDetails']?.errors?.['pattern']" class="text-red-500">
+                        {{ tr('Only letters, numbers and dash - allowed') }}
+                    </small>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-span-2 flex justify-end gap-4 mt-4">
+                    <button type="button" routerLink="/admin/premium-offers"
+                        class="px-6 py-2 bg-gray-300 dark:bg-gray-600 rounded">
+                        {{ tr('Cancel') }}
+                    </button>
+
+                    <button type="submit" [disabled]="isSaving || nameExists"
+                        class="px-6 py-2 bg-blue-600 text-white rounded">
+                        {{ isSaving ? tr('Saving...') : tr('Add') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</section>

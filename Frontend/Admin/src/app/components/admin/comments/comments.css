@@ -1,0 +1,4 @@
+/* Add modern hover and smooth transitions */
+table tr:hover {
+  transition: 0.2s ease;
+}

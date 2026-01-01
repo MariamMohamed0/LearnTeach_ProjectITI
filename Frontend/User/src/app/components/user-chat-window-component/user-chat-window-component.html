@@ -1,0 +1,41 @@
+<div class="chat-container bg-gray-50 dark:bg-gray-800">
+
+<div class="receiver-header flex items-center gap-3 p-3 border-b border-gray-200bg-gray-50 dark:bg-gray-800">
+  <span class="relative flex overflow-hidden rounded-full h-12 w-12">
+    <ng-container *ngIf="receiverProfile?.profilePic; else initials">
+      <img 
+        [src]="receiverProfile?.profilePic" 
+        alt="Receiver Pic" 
+        class="h-full w-full object-cover rounded-full"
+      />
+    </ng-container>
+
+    <ng-template #initials>
+      <div class="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+        {{ receiverProfile?.fname?.charAt(0)?.toUpperCase() || '?' }}
+      </div>
+    </ng-template>
+  </span>
+
+  <span class="receiver-name font-semibold text-gray-700">
+    {{ receiverProfile?.fname }} {{ receiverProfile?.lname }}
+  </span>
+</div>
+
+
+
+  <!-- Messages area -->
+  <div class="messages">
+    <div *ngFor="let msg of messages" 
+         [ngClass]="{'my-message': msg.senderId === 'me', 'other-message': msg.senderId !== 'me'}"
+         class="message">
+      <div class="message-text">{{ msg.message }}</div>
+      <div class="message-time">{{ msg.createdAt | date:'shortTime' }}</div>
+    </div>
+  </div>
+
+  <div class="input-area bg-gray-50 dark:bg-gray-800">
+    <input [(ngModel)]="message" placeholder="{{tr('Write your message...')}}" class="chat-input" />
+    <button type="button" (click)="send()" class="btn-send">{{tr('Send')}}</button>
+  </div>
+</div>

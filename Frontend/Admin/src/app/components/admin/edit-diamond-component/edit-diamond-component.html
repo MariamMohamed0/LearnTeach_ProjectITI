@@ -1,0 +1,136 @@
+<section class="flex w-full min-h-screen bg-gray-50 dark:bg-gray-900 ">
+    <div [ngClass]="{
+        'fixed inset-0 z-50 transform transition-transform duration-300': isMobile(),
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+
+        'w-7': !isSidebarOpen && !isMobile(),
+        'w-60': isSidebarOpen || isMobile()
+      }" class="bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 flex-shrink-0">
+        <app-sidebar [collapsed]="!isSidebarOpen"></app-sidebar>
+    </div>
+
+    <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+    <main [ngClass]="{
+      'ml-0 w-full': isMobile(),
+      'ml-9 w-[calc(100%-2rem)]': !isSidebarOpen && !isMobile(),   
+      'ml-5 w-[calc(100%-14rem)]': isSidebarOpen && !isMobile()   
+    }" class="flex flex-col transition-all duration-300  overflow-auto">
+
+        <app-admin-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+            (toggleDarkModeEvent)="toggleDarkMode()">
+        </app-admin-header>
+
+        <!-- Content -->
+        <div class="mt-5 p-8 w-full lg:w-3/4 mx-auto rounded-lg shadow-lg transition-colors duration-300"
+            [class.bg-white]="!isDarkMode" [class.bg-gray-800]="isDarkMode">
+
+            <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">
+                {{ tr('EDIT_PACKAGE') }}
+            </h2>
+
+            <div *ngIf="loading" class="text-center text-gray-500 dark:text-gray-300">
+                {{ tr('LOADING') }}
+            </div>
+
+            <form *ngIf="!loading" [formGroup]="editForm" class="grid gap-6">
+
+                <!-- Package Name -->
+                <div>
+                    <label class="block mb-2 font-semibold text-gray-700 dark:text-gray-300">
+                        {{ tr('TITLE') }}
+                    </label>
+                    <input type="text" maxlength="50"
+                        class="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                        formControlName="title" />
+
+                    <p class="text-red-500 text-sm mt-1"
+                        *ngIf="editForm.get('title')?.touched && editForm.get('title')?.invalid || editForm.get('title')?.pending">
+
+                        <span *ngIf="editForm.get('title')?.errors?.['required']">
+                            {{ tr('TITLE_REQUIRED') }}
+                        </span>
+
+                        <span *ngIf="editForm.get('title')?.errors?.['maxlength']">
+                            {{ tr('TITLE_MAX') }}
+                        </span>
+
+                        <span *ngIf="editForm.get('title')?.errors?.['invalidName']">
+                            {{ tr('TITLE_INVALID_SYMBOLS') }}
+                        </span>
+
+                        <span *ngIf="editForm.get('title')?.errors?.['nameExists']">
+                            {{ tr('TITLE_ALREADY_EXISTS') }}
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <!-- Diamond Amount -->
+                <div>
+                    <label class="block mb-2 font-semibold text-gray-700 dark:text-gray-300">
+                        {{ tr('AMOUNT') }}
+                    </label>
+                    <input type="number"
+                        class="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                        formControlName="diamondAmount" />
+                    <p class="text-red-500 text-sm mt-1"
+                        *ngIf="editForm.get('diamondAmount')?.touched && editForm.get('diamondAmount')?.invalid">
+                        <span *ngIf="editForm.get('diamondAmount')?.errors?.['required']">{{ tr('AMOUNT_REQUIRED')
+                            }}</span>
+                        <span *ngIf="editForm.get('diamondAmount')?.errors?.['min']">{{ tr('AMOUNT_MIN') }}</span>
+                        <span *ngIf="editForm.get('diamondAmount')?.errors?.['max']">{{ tr('AMOUNT_MAX') }}</span>
+                        <span *ngIf="editForm.get('diamondAmount')?.errors?.['pattern']">{{ tr('AMOUNT_NUMBER_ONLY')
+                            }}</span>
+                    </p>
+                </div>
+
+                <!-- Price -->
+                <div>
+                    <label class="block mb-2 font-semibold text-gray-700 dark:text-gray-300">
+                        {{ tr('PRICE') }}
+                    </label>
+                    <input type="number"
+                        class="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                        formControlName="price" />
+                    <p class="text-red-500 text-sm mt-1"
+                        *ngIf="editForm.get('price')?.touched && editForm.get('price')?.invalid">
+                        <span *ngIf="editForm.get('price')?.errors?.['required']">{{ tr('PRICE_REQUIRED') }}</span>
+                        <span *ngIf="editForm.get('price')?.errors?.['min']">{{ tr('PRICE_MIN') }}</span>
+                        <span *ngIf="editForm.get('price')?.errors?.['max']">{{ tr('PRICE_MAX') }}</span>
+                        <span *ngIf="editForm.get('price')?.errors?.['pattern']">{{ tr('PRICE_NUMBER_ONLY') }}</span>
+                    </p>
+                </div>
+
+                <!-- Currency -->
+                <div>
+                    <label class="block mb-2 font-semibold text-gray-700 dark:text-gray-300">
+                        {{ tr('CURRENCY') }}
+                    </label>
+                    <input type="text"
+                        class="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                        formControlName="currency" />
+                    <p class="text-red-500 text-sm mt-1"
+                        *ngIf="editForm.get('currency')?.touched && editForm.get('currency')?.invalid">
+                        <span *ngIf="editForm.get('currency')?.errors?.['required']">{{ tr('CURRENCY_REQUIRED')
+                            }}</span>
+                        <span *ngIf="editForm.get('currency')?.errors?.['invalidCurrency']">{{ tr('CURRENCY_INVALID')
+                            }}</span>
+                    </p>
+                </div>
+
+                <!-- Save Button -->
+                <button type="button" (click)="save()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg mt-4 transition-all duration-200 transform hover:scale-105"
+                    [disabled]="saving">
+                    {{ saving ? tr('SAVING') : tr('SAVE') }}
+                </button>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</section>

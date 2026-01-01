@@ -1,0 +1,270 @@
+<div 
+  [ngClass]="{'w-16': collapsed, 'w-64': !collapsed}"
+  class="sidebar flex flex-col fixed top-0 left-0 h-screen
+         bg-white text-black 
+         dark:bg-gray-800 dark:text-white
+         transition-all duration-300">
+
+  <div class="flex flex-col justify-between flex-1 overflow-auto">
+    <div class="flex h-12 items-center px-4">
+      <span *ngIf="!collapsed"
+        class="flex items-center justify-center w-full h-10 mt-3 rounded-full  dark:bg-gray-500 text-gray-1000 dark:text-gray-100 font-semibold transition-colors duration-300">
+        {{ tr('ADMIN_PANEL') }}
+      </span>
+    </div>
+
+    <!-- Menu Items -->
+    <ul class="flex flex-col gap-2 mt-2">
+
+      <!-- Dashboard -->
+      <li>
+        <a [routerLink]="'/dashboard'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+           hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faHome" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('DASHBOARD') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Categories -->
+      <li>
+        <a [routerLink]="'/categories'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+          hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faFolder" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('CATEGORIES') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Certificate -->
+      <li>
+        <a [routerLink]="'/certificates'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+     hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faCertificate" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('CERTIFICATE') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Posts -->
+      <li>
+        <a [routerLink]="'/posts'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+           hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faFileAlt" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('POSTS') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Comments -->
+      <li>
+        <a [routerLink]="'/comments'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+         hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faComment" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('COMMENTS') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Likes -->
+      <!-- <li>
+        <a [routerLink]="'/likes'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+          hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faHeart" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('LIKES') }}
+          </span>
+        </a>
+      </li> -->
+
+      <!-- Materials -->
+      <!-- <li>
+        <a [routerLink]="'/materials'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+           hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faBox" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('MATERIALS') }}
+          </span>
+        </a>
+      </li> -->
+
+      <!-- Diamonds Statistics -->
+      <li>
+        <a [routerLink]="'/admin/diamonds'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+          hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faGem" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('DIAMONDS_SYSTEM') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Diamonds Offers -->
+      <li>
+        <a [routerLink]="'/admin/diamonds-offers'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+          hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faGift" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('DIAMONDS_OFFERS') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Premium Statistics -->
+      <li>
+        <a [routerLink]="'/admin/premium-statistics'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+          hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faChartBar" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('premium_statistics') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Premium Offers -->
+      <li>
+        <a [routerLink]="'/admin/premium-offers'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+          hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faStar" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('premium_offers') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Projects -->
+      <li>
+        <a [routerLink]="'/projects'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+           hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faBriefcase" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('PROJECTS') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Report -->
+      <li>
+        <a [routerLink]="'/admin-reports'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+          hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faFileAlt" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('REPORT') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Skill -->
+      <li>
+        <a [routerLink]="'/skill'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faStar" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('SKILL') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Social Media -->
+      <li>
+        <a [routerLink]="'/social-media'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+         hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faShareAlt" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('SOCIAL_MEDIA') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- ID Verification -->
+      <li>
+        <a [routerLink]="'/admin/national-id'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+           hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faIdCard" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('ID_VERIFICATION') }}
+          </span>
+        </a>
+      </li>
+
+      <!-- Feedback -->
+      <!-- <li>
+        <a [routerLink]="'/feedback'" class="flex items-center gap-3 p-2 rounded-full transition-all duration-200 group
+          hover:bg-blue-600 dark:hover:bg-gray-900 w-max">
+          <span
+            class="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 transition-colors duration-200 group-hover:bg-blue-600 dark:group-hover:bg-gray-900">
+            <fa-icon [icon]="faCommentDots" class="text-blue-500 dark:text-gray-100 group-hover:text-white"></fa-icon>
+          </span>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 group-hover:text-white font-medium">
+            {{ tr('FEEDBACK') }}
+          </span>
+        </a>
+      </li> -->
+
+      <!-- Logout -->
+      <li>
+        <a (click)="confirmLogout()" class="flex items-center gap-3 px-4 py-2 rounded-full transition-colors duration-200
+         hover:bg-red-600 dark:hover:bg-red-700 w-max">
+          <fa-icon [icon]="faSignOut" class="text-red-500 dark:text-red-400 transition-colors duration-200"></fa-icon>
+          <span *ngIf="!collapsed" class="text-gray-700 dark:text-gray-100 font-medium transition-colors duration-200">
+            {{ tr('LOGOUT') }}
+          </span>
+        </a>
+      </li>
+
+    </ul>
+  </div>
+</div>

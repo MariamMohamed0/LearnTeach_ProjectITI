@@ -1,0 +1,139 @@
+<section class="flex w-full min-h-screen bg-gray-50 dark:bg-gray-900 ">
+  <div [ngClass]="{
+        'fixed inset-0 z-50 transform transition-transform duration-300': isMobile(),
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+
+        'w-7': !isSidebarOpen && !isMobile(),
+        'w-60': isSidebarOpen || isMobile()
+      }" class="bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 flex-shrink-0">
+    <app-sidebar [collapsed]="!isSidebarOpen"></app-sidebar>
+  </div>
+
+  <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+  <main [ngClass]="{
+      'ml-0 w-full': isMobile(),
+      'ml-9 w-[calc(100%-2rem)]': !isSidebarOpen && !isMobile(),   
+      'ml-5 w-[calc(100%-14rem)]': isSidebarOpen && !isMobile()   
+    }" class="flex flex-col transition-all duration-300  overflow-auto">
+
+    <app-admin-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+      (toggleDarkModeEvent)="toggleDarkMode()">
+    </app-admin-header>
+
+    <div class="p-4 ml-3">
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between  mt-4">
+                <h1 class="text-3xl font-bold text-gray-900 mb-3 dark:text-gray-100">{{tr('Skills')}}</h1>
+                <button
+                    class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                    (click)="openAddEditDialog()">
+                    {{tr('+ Add Skill')}}
+                </button>
+
+            </div>
+
+            <div class="w-full mt-4">
+                <input type="text"
+                    class="w-full border border-gray-300 dark:border-gray-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-900 dark:text-gray-100"
+                    placeholder="{{ tr('Search by skill...') }}" [(ngModel)]="searchTerm" (input)="filter()" />
+            </div>
+            <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg mt-4">
+                <table class="w-full text-left min-w-[600px]">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
+                        <tr>
+                            <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('Name')}}</th>
+                            <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('Category')}}</th>
+                            <th class="px-4 py-3 text-right text-gray-900 dark:text-gray-100">{{tr('Actions')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let s of filteredSkills"
+                            class="border-b hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                            <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{{ s.name }}</td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ getCategoryName(s.cateId) }}</td>
+                            <td class="px-4 py-3 text-right flex gap-2 justify-end">
+                                <button
+                                    class="px-2 py-1  bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+                                    (click)="openAddEditDialog(s)"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button
+                                    class="px-2 py-1 bg-red-100 dark:bg-red-700 text-red-600 dark:text-red-200 rounded"
+                                    (click)="openDeleteDialog(s)"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="isAddEditDialogOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80">
+                    <h2 class="text-xl font-bold mb-4 dark:text-white">{{ selectedSkill ? 'Edit Skill' : 'Add Skill' }}
+                    </h2>
+                    <input type="text" placeholder="Name" [(ngModel)]="newSkill.name"
+                        class="w-full mb-3 px-3 py-2 border rounded-lg" />
+
+
+                    <select [(ngModel)]="newSkill.cateId" class="w-full mb-3 px-3 py-2 border rounded-lg">
+                        <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+                    </select>
+                    <div class="flex justify-end gap-2">
+                        <button class="px-4 py-2 rounded bg-gray-300 dark:bg-gray-700"
+                            (click)="closeAddEditDialog()">{{tr('Cancel')}}</button>
+                        <button class="px-4 py-2 rounded bg-blue-600 text-white" (click)="saveSkill()">Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="isDeleteDialogOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80">
+                    <h2 class="text-xl font-bold mb-4 dark:text-white">{{tr('Delete Skill')}}</h2>
+                    <p class="text-gray-700 dark:text-gray-300">{{ tr('Are you sure you want to delete ') }}<b>{{ selectedSkill?.name }}</b>?</p>
+                    <div class="flex justify-end gap-2 mt-4">
+                        <button class="px-4 py-2 rounded bg-gray-300 dark:bg-gray-700"
+                            (click)="closeDeleteDialog()">{{tr('Cancel')}}</button>
+                        <button class="px-4 py-2 rounded bg-red-600 text-white"
+                            (click)="confirmDelete()">{{tr('Delete')}}</button>
+                    </div>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold mt-8 dark:text-gray-100">{{tr('User Skills')}}</h2>
+
+            <div class="w-full mt-4">
+                <input type="text"
+                    class="w-full border border-gray-300 dark:border-gray-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-900 dark:text-gray-100"
+                    placeholder="Search user skills..." [(ngModel)]="searchUserSkillTerm"
+                    (input)="filterUserSkills()" />
+            </div>
+
+            <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg mt-4">
+                <table class="w-full text-left min-w-[600px]">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
+                        <tr>
+                            <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('User')}}</th>
+                            <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('Skill')}}</th>
+                            <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('Category')}}</th>
+                            <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('Good At')}}</th>
+                            <th class="px-4 py-3 text-right text-gray-900 dark:text-gray-100">{{tr('Actions')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let us of filteredUserSkills"
+                            class="border-b hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ us.userName }}</td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ us.name }}</td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ us.categoryName }}</td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ us.goodAtIt }}</td>
+                            <td class="px-4 py-3 text-right">
+                                <button
+                                    class="px-2 py-1 bg-red-100 dark:bg-red-700 text-red-600 dark:text-red-200 rounded"
+                                    (click)="deleteUserSkill(us)">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</section>

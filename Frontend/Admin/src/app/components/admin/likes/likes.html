@@ -1,0 +1,63 @@
+<section class="flex w-full min-h-screen bg-gray-50 dark:bg-gray-900 ">
+  <div [ngClass]="{
+        'fixed inset-0 z-50 transform transition-transform duration-300': isMobile(),
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+
+        'w-7': !isSidebarOpen && !isMobile(),
+        'w-60': isSidebarOpen || isMobile()
+      }" class="bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 flex-shrink-0">
+    <app-sidebar [collapsed]="!isSidebarOpen"></app-sidebar>
+  </div>
+
+  <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+  <main [ngClass]="{
+      'ml-0 w-full': isMobile(),
+      'ml-9 w-[calc(100%-2rem)]': !isSidebarOpen && !isMobile(),   
+      'ml-5 w-[calc(100%-14rem)]': isSidebarOpen && !isMobile()   
+    }" class="flex flex-col transition-all duration-300  overflow-auto">
+
+    <app-admin-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+      (toggleDarkModeEvent)="toggleDarkMode()">
+    </app-admin-header>
+<div class=" pr-3 pl-3  dark:text-white">
+  <div class="content-area">
+
+    <div class="header">
+      <h2>Likes for Post #{{ postId }}</h2>
+    </div>
+
+    <div *ngIf="loading" class="loading">Loading...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+   <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg mt-4">
+     <table class="w-full text-left min-w-[400px] " *ngIf="!loading && likes.length > 0">
+      <thead class="bg-gray-100 dark:bg-gray-700">
+        <tr>
+          <th class="px-4 py-3 text-gray-900 dark:text-gray-100 " style="text-align: center;" >User</th>
+          <th class="px-4 py-3 text-gray-900 dark:text-gray-100" style="text-align: center;">User ID</th>
+          <th class="px-4 py-3 text-gray-900 dark:text-gray-100" style="text-align: center;">Action</th>
+        </tr>
+      </thead>
+
+      <tbody class="">
+        <tr *ngFor="let l of likes">
+          <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100"style="text-align: center;">{{ l.userName }}</td>
+          <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100" style="text-align: center;">{{ l.userId }}</td>
+          <td style="text-align: center;">
+            <button class="p-2 bg-red-100 dark:bg-red-700 text-red-600 dark:text-red-200 rounded hover:bg-red-200 dark:hover:bg-red-600 transition" (click)="deleteLike(l)"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+   </div>
+
+    <div *ngIf="!loading && likes.length === 0" class="empty">
+      No likes found for this post.
+    </div>
+
+  </div>
+
+</div>
+</main>
+</section>

@@ -1,0 +1,98 @@
+<nav class="bg-white shadow dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div>
+        <img [src]="isDark ? 'images/logo-dark.png' : 'images/logo.png'" alt="Logo" class="h-8 w-auto">
+      </div>
+      <div class="hidden xl:flex flex-1 justify-center gap-8 items-center">
+        <a [routerLink]="['/']" fragment="home"
+          [ngClass]="{'text-blue-500 font-bold': activeSection==='home', 'text-gray-600': activeSection!=='home'}"
+          class="hover:text-blue-500 text-xl dark:text-white">{{ tr('Home') }}</a>
+        <a [routerLink]="['/']" fragment="about"
+          [ngClass]="{'text-blue-500 font-bold': activeSection==='about', 'text-gray-600': activeSection!=='about'}"
+          class="hover:text-blue-500 text-xl dark:text-white">{{ tr('About') }}</a>
+        <a [routerLink]="['/']" fragment="section"
+          [ngClass]="{'text-blue-500 font-bold': activeSection==='section', 'text-gray-600': activeSection!=='section'}"
+          class="hover:text-blue-500 text-xl dark:text-white">{{ tr('Sections') }}</a>
+        <a [routerLink]="['/']" fragment="contact"
+          [ngClass]="{'text-blue-500 font-bold': activeSection==='contact', 'text-gray-600': activeSection!=='contact'}"
+          class="hover:text-blue-500 text-xl dark:text-white">{{ tr('Contact') }}</a>
+      </div>
+      <div class="hidden xl:flex items-center gap-3">
+        <button (click)="toggleDarkMode()" class="text-2xl text-gray-700 hover:text-blue-600 transition">
+          <i class="fa-solid" [ngClass]="isDark ? 'fa-sun' : 'fa-moon'"></i>
+        </button>
+        <div class="relative">
+          <button (click)="toggleLangMenu()"
+            class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center shadow hover:scale-105 transition">
+            <i class="fa-solid fa-globe text-xl"></i>
+          </button>
+          <div *ngIf="langMenuOpen"
+            class="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 shadow-lg rounded-md p-2 z-50">
+            <button (click)="switchLang('en'); toggleLangMenu()"
+              class="w-full text-left px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+              English
+            </button>
+            <button (click)="switchLang('ar'); toggleLangMenu()"
+              class="w-full text-left px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+              العربية
+            </button>
+          </div>
+        </div>
+        <a href="#" class="btn-outline px-3 py-1 rounded-md text-center">{{ tr('Login') }}</a>
+        <a href="#" class="btn-primary px-3 py-1 rounded-md text-center">{{ tr('Sign Up') }}</a>
+      </div>
+      <div class="xl:hidden flex items-center gap-3">
+        <button (click)="toggleDarkMode()" class="text-2xl text-gray-700 hover:text-blue-600 transition">
+          <i class="fa-solid" [ngClass]="isDark ? 'fa-sun' : 'fa-moon'"></i>
+        </button>
+
+        <div class="relative">
+          <button (click)="toggleLangMenu()"
+            class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center shadow hover:scale-105 transition">
+            <i class="fa-solid fa-globe text-xl"></i>
+          </button>
+          <div *ngIf="langMenuOpen" [ngClass]="{
+        'right-0':  t.getCurrentLanguage() === 'en',
+        'left-0':  t.getCurrentLanguage() === 'ar'
+      }" class="absolute mt-2 min-w-[120px] max-w-xs bg-white dark:bg-gray-800 shadow-lg rounded-md p-2 z-50">
+
+            <button (click)="switchLang('en'); toggleLangMenu()"
+              class="w-full text-left px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+              English
+            </button>
+            <button (click)="switchLang('ar'); toggleLangMenu()"
+              class="w-full text-left px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+              العربية
+            </button>
+          </div>
+        </div>
+        <button (click)="toggleMobileMenu()" class="text-gray-700 hover:text-blue-600 focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+  <div *ngIf="mobileMenuOpen" id="mobile-menu" class="xl:hidden px-4 py-3">
+    <a [routerLink]="['/']" fragment="home"
+      [ngClass]="{'text-blue-500 font-bold': activeSection==='home', 'text-gray-600': activeSection!=='home'}"
+      class="hover:text-blue-500 text-xl dark:text-white block mb-2">{{ tr('Home') }}</a>
+    <a [routerLink]="['/']" fragment="about"
+      [ngClass]="{'text-blue-500 font-bold': activeSection==='about', 'text-gray-600': activeSection!=='about'}"
+      class="hover:text-blue-500 text-xl dark:text-white block mb-2">{{ tr('About') }}</a>
+    <a [routerLink]="['/']" fragment="section"
+      [ngClass]="{'text-blue-500 font-bold': activeSection==='section', 'text-gray-600': activeSection!=='section'}"
+      class="hover:text-blue-500 text-xl dark:text-white block mb-2">{{ tr('Sections') }}</a>
+    <a [routerLink]="['/']" fragment="contact"
+      [ngClass]="{'text-blue-500 font-bold': activeSection==='contact', 'text-gray-600': activeSection!=='contact'}"
+      class="hover:text-blue-500 text-xl dark:text-white block mb-2">{{ tr('Contact') }}</a>
+
+    <div class="flex flex-col gap-2 mt-2">
+      <a [routerLink]="['/Login']" class="btn-outline px-3 py-1 rounded-md text-center">{{ tr('Login') }}</a>
+      <a [routerLink]="['/register']" class="btn-primary px-3 py-1 rounded-md text-center">{{ tr('Sign Up') }}</a>
+    </div>
+  </div>
+</nav>

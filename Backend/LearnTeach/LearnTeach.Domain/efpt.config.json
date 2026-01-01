@@ -1,0 +1,146 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "LEANRANDTEACHContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "MinimumProductVersion": "2.6.1186",
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "LearnTeach.Domain",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[CATEGORIESS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CERTIFICATES]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CHATTHREAD]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[COMMENTS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DIAMOND]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FEEDBACK]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LIKES]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MATERIALS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NOTIFICATIONS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PACKAGE]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PAYMENTTRANSACTION]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[POSTMEDIAS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[POSTS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PremiumSubscriber]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PROJECTS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[REPORTS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SESSION]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SKILLS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SOCIALMEDIAACCOUNTS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[USERFEEDBACK]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[USERNATIONALID]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[USERPAYMENT]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[USERSESSIONFEEDBACKS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[USERSKILLS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[USERSPROFILE]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}

@@ -1,0 +1,115 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f5f7fa;
+}
+
+.btn-outline,
+.btn-primary {
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid #3869EB;
+    color: #3869EB;
+    transition: 0.3s;
+}
+
+.btn-outline:hover {
+    background-color: #3869EB;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #3869EB;
+    color: white;
+    border: 2px solid #3869EB;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2f57c7;
+}
+
+/* start dark mode */
+
+.dark body {
+    background-color: #111827;
+    color: #e5e7eb;
+}
+
+.dark nav {
+    background-color: #1f2937;
+}
+
+
+
+.dark a {
+    color: #d1d5db;
+}
+
+.dark a:hover {
+    color: #60a5fa;
+}
+
+.dark .btn-primary {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+.dark .btn-outline {
+    border-color: #60a5fa;
+    color: #60a5fa;
+}
+
+.dark .btn-outline:hover {
+    background-color: #60a5fa;
+    color: white;
+}
+
+.dark .context::before {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.dark section,
+.dark .bg-blue-50 {
+    background-color: #111827;
+}
+
+.dark input,
+.dark textarea {
+    background-color: #1f2937;
+    color: #e5e7eb;
+    border-color: #374151;
+}
+
+.dark .bg-blue-100,
+.dark .contact .bg-white {
+    background-color: #16305a !important;
+    color: #fff;
+}
+
+.dark .text-gray-700,
+.dark .text-gray-600,
+.dark .text-gray-800 {
+    color: #d1d5db !important;
+}
+
+/* end dark mode */
+html {
+  scroll-behavior: smooth;
+}
+.text-center{
+    text-align: center;
+}

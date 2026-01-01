@@ -1,0 +1,483 @@
+<!-- 
+
+
+
+ <div class="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 md:p-6">
+
+  <div *ngIf="loading" class="flex justify-center items-center " >
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
+    <span class="ml-3 text-gray-600 dark:text-gray-300">Loading posts...</span>
+  </div>
+
+  <div class="space-y-6" *ngIf="!loading">
+   <ng-container *ngFor="let p of posts">
+  <article 
+    *ngIf="selectedCategoryId === null || p.categoryId === selectedCategoryId"
+    class="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-4 md:p-6">
+      
+<div
+  class="rounded-lg bg-card dark:bg-gray-700 text-card-foreground dark:text-gray-200 shadow-sm hover:shadow-2xl transition-all border-2 hover:border-primary/50 bg-gradient-to-br from-card via-card to-primary/5 dark:from-gray-700 dark:via-gray-700 dark:to-primary/10">
+  <div class="p-4 md:p-6 space-y-4">
+
+    <div class="flex items-center gap-3 flex-wrap md:flex-nowrap">
+      <span class="relative flex shrink-0 overflow-hidden rounded-full h-10 w-10 md:h-12 md:w-12 ring-2 ring-primary/10 dark:ring-primary/20">
+  <img 
+    *ngIf="p.user?.profilePic" 
+    class="aspect-square h-full w-full" 
+    [src]="p.user?.profilePic" 
+    alt="User Avatar"
+  >
+  <div 
+    *ngIf="!p.user?.profilePic" 
+    class="aspect-square h-full w-full bg-blue-100 dark:bg-blue-200 flex items-center justify-center text-white dark:text-gray-800 font-bold text-base md:text-lg rounded-full"
+  >
+    {{ (p.user?.fname || 'U')[0].toUpperCase() }}
+  </div>
+</span>
+
+
+      <div class="flex-1 min-w-0">
+<a 
+  [routerLink]="p.user?.userId === currentUserId ? ['/myprofile'] : ['/user', p.user?.userId] "
+  [class.no-click]="p.user?.userId === currentUserId"
+  class="font-semibold text-sm text-black-600 dark:text-gray-300"
+>
+  {{ p.user?.fname || 'Unknown' }} {{ p.user?.lname || '' }}
+</a>
+
+        <p class="text-xs text-muted-foreground dark:text-gray-400">
+          {{ p.createdAt | date:'mediumDate' }} at {{ p.createdAt | date:'shortTime' }}
+        </p>
+      </div>
+
+      <div
+        class="inline-flex items-center border px-2.5 py-0.5 text-xs font-semibold transition-colors
+        focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent
+        bg-secondary dark:bg-gray-600 text-secondary-foreground dark:text-gray-200 hover:bg-secondary/80 dark:hover:bg-gray-500 shrink-0 rounded-full">
+        {{ p.skillName }}
+      </div>
+    </div>
+
+    <p class="text-sm leading-relaxed w-full md:w-3/4 lg:w-1/2">  
+      {{ p.content }}
+    </p>
+
+    <div data-orientation="horizontal" role="none" class="shrink-0 bg-border dark:bg-gray-600 h-[1px] w-full"></div>
+
+    <div class="flex items-center gap-4 flex-wrap md:flex-nowrap">
+
+      <button  (click)="toggleLike(p)"
+      [ngClass]="p.likedByUser
+          ? 'bg-blue-600 text-white hover:bg-blue-700'
+          : 'border border-input bg-background dark:bg-gray-700 hover:bg-accent dark:hover:bg-gray-600 hover:text-accent-foreground dark:hover:text-gray-200'"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium
+        ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2
+        focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
+        [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background dark:bg-gray-700
+        hover:bg-accent dark:hover:bg-gray-600 hover:text-accent-foreground dark:hover:text-gray-200 h-9 px-3 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-thumbs-up h-4 w-4 mr-2">
+          <path d="M7 10v12"></path>
+          <path
+            d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z">
+          </path>
+        </svg>
+        {{ p.totalLiked ?? 0 }}
+      </button>
+
+      <div class="flex items-center gap-2 text-sm text-muted-foreground dark:text-gray-400"
+        [routerLink]="['/posts', p.postId]">
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-message-square h-4 w-4">
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z">
+          </path>
+        </svg>
+
+        {{ p.totalComments ?? 0 }}
+      </div>
+    </div>
+  </div>
+</div>
+
+    </article>
+    </ng-container>
+  </div>
+
+  <div class="flex justify-center items-center mt-8 gap-4 flex-wrap md:flex-nowrap" *ngIf="!loading && posts.length > 0">
+    <button (click)="page = page - 1; loadPosts()" [disabled]="page <= 1"
+            class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition">
+      ← Previous
+    </button>
+    <span class="text-gray-600 dark:text-gray-300 font-medium">Page {{ page }}</span>
+    <button (click)="page = page + 1; loadPosts()" [disabled]="posts.length < pageSize"
+            class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition">
+      Next →
+    </button>
+  </div>
+
+  <div *ngIf="!loading && posts.length === 0" class="text-center py-12 text-gray-500 dark:text-gray-400">
+    <p class="text-lg">No posts found. Try searching or create a new post!</p>
+  </div>
+</div> -->
+
+
+
+
+
+
+
+
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 md:p-6">
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex justify-center items-center " >
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
+    <span class="ml-3 text-gray-600 dark:text-gray-300">Loading posts...</span>
+  </div>
+
+  <!-- Posts List -->
+  <div class="space-y-6" *ngIf="!loading">
+   <ng-container *ngFor="let p of posts">
+  <article 
+    *ngIf="selectedCategoryId === null || p.categoryId === selectedCategoryId"
+    class="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-4 md:p-6">
+      
+<div
+  class="rounded-lg bg-card dark:bg-gray-700 text-card-foreground dark:text-gray-200 shadow-sm hover:shadow-2xl transition-all border-2 hover:border-primary/50 bg-gradient-to-br from-card via-card to-primary/5 dark:from-gray-700 dark:via-gray-700 dark:to-primary/10">
+  <div class="p-4 md:p-6 space-y-4">
+
+    <!-- Header -->
+    <div class="flex items-center gap-3 flex-wrap md:flex-nowrap">
+      <span class="relative flex shrink-0 overflow-hidden rounded-full h-10 w-10 md:h-12 md:w-12 ring-2 ring-primary/10 dark:ring-primary/20">
+  <img 
+    *ngIf="p.user?.profilePic" 
+    class="aspect-square h-full w-full" 
+    [src]="p.user?.profilePic" 
+    alt="User Avatar"
+  >
+  <div 
+    *ngIf="!p.user?.profilePic" 
+    class="aspect-square h-full w-full bg-blue-100 dark:bg-blue-200 flex items-center justify-center text-white dark:text-gray-800 font-bold text-base md:text-lg rounded-full"
+  >
+    {{ (p.user?.fname || 'U')[0].toUpperCase() }}
+  </div>
+</span>
+
+
+      <div class="flex-1 min-w-0">
+<a 
+  [routerLink]="p.user?.userId === currentUserId ? ['/myprofile'] : ['/user', p.user?.userId] "
+  [class.no-click]="p.user?.userId === currentUserId"
+  class="font-semibold text-sm text-black-600 dark:text-gray-300"
+>
+  {{ p.user?.fname || 'Unknown' }} {{ p.user?.lname || '' }}
+</a>
+
+        <p class="text-xs text-muted-foreground dark:text-gray-400">
+          {{ p.createdAt | date:'mediumDate' }} at {{ p.createdAt | date:'shortTime' }}
+        </p>
+      </div>
+
+      <div
+        class="inline-flex items-center border px-2.5 py-0.5 text-xs font-semibold transition-colors
+        focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent
+        bg-secondary dark:bg-gray-600 text-secondary-foreground dark:text-gray-200 hover:bg-secondary/80 dark:hover:bg-gray-500 shrink-0 rounded-full">
+        {{ p.skillName }}
+      </div>
+
+
+
+<button *ngIf="p.user?.userId === currentUserId" (click)="toggleDropdown(p)"
+      class="relative p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-more-vertical h-4 w-4">
+        <circle cx="12" cy="12" r="1"></circle>
+        <circle cx="12" cy="5" r="1"></circle>
+        <circle cx="12" cy="19" r="1"></circle>
+      </svg>
+    </button>
+    <!-- <div *ngIf="p.dropdownOpen" class="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10">
+      <button (click)="openEditModal(p); toggleDropdown(p)"  
+        class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-edit h-4 w-4">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        Edit
+      </button>
+    </div> -->
+    <div *ngIf="p.dropdownOpen" class="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10">
+  <!-- زر Edit زي ما هو -->
+  <button (click)="openEditModal(p); toggleDropdown(p)"
+    class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-edit h-4 w-4">
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+      <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+    </svg>
+    Edit
+  </button>
+  <!-- زر Delete الجديد -->
+  <button (click)="deletePost(p); toggleDropdown(p)"  
+    class="w-full text-left px-4 py-2 text-sm hover:bg-red-100 dark:hover:bg-red-900 text-red-600 dark:text-red-400 flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash h-4 w-4">
+      <path d="M3 6h18"></path>
+      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+    </svg>
+    Delete
+  </button>
+</div>
+
+
+
+
+      
+    </div>
+
+    <!-- Content -->
+    <p class="text-sm leading-relaxed w-full md:w-3/4 lg:w-1/2">
+      {{ p.content }}
+    </p>
+
+    <!-- <div *ngIf="p?.medias?.length" class="mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+          <img *ngFor="let m of p.medias" [src]="m.mediaUrl" alt="Post media" 
+               class="w-full h-48 object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow" />
+        </div>
+      </div> -->
+      <div *ngIf="p?.medias?.length" class="mb-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+    <img *ngFor="let m of p.medias" src="images/photo_5886497488468905056_x.jpg" alt="Post media" 
+         class="w-full h-48 object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow" />
+  </div>
+</div>
+
+
+
+    
+
+    <div data-orientation="horizontal" role="none" class="shrink-0 bg-border dark:bg-gray-600 h-[1px] w-full"></div>
+
+    <!-- Buttons -->
+    <div class="flex items-center gap-4 flex-wrap md:flex-nowrap">
+
+      <!-- Like button -->
+      <button  (click)="toggleLike(p)"
+      [ngClass]="p.likedByUser
+          ? 'bg-blue-600 text-white hover:bg-blue-700'
+          : 'border border-input bg-background dark:bg-gray-700 hover:bg-accent dark:hover:bg-gray-600 hover:text-accent-foreground dark:hover:text-gray-200'"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium
+        ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2
+        focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
+        [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background dark:bg-gray-700
+        hover:bg-accent dark:hover:bg-gray-600 hover:text-accent-foreground dark:hover:text-gray-200 h-9 px-3 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-thumbs-up h-4 w-4 mr-2">
+          <path d="M7 10v12"></path>
+          <path
+            d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z">
+          </path>
+        </svg>
+        {{ p.totalLiked ?? 0 }}
+      </button>
+
+      <!-- Edit button (بس لو البوست بتاع اليوزر) -->
+      <!-- <button *ngIf="p.user?.userId === currentUserId" (click)="openEditModal(p)"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium
+        ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2
+        focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
+        [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background dark:bg-gray-700
+        hover:bg-accent dark:hover:bg-gray-600 hover:text-accent-foreground dark:hover:text-gray-200 h-9 px-3 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-edit h-4 w-4 mr-2">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        Edit
+      </button> -->
+
+      <!-- Comments -->
+      <div class="flex items-center gap-2 text-sm text-muted-foreground dark:text-gray-400"
+        [routerLink]="['/posts', p.postId]">
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-message-square h-4 w-4">
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z">
+          </path>
+        </svg>
+
+        {{ p.totalComments ?? 0 }}
+      </div>
+    </div>
+  </div>
+</div>
+
+    </article>
+    </ng-container>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-center items-center mt-8 gap-4 flex-wrap md:flex-nowrap" *ngIf="!loading && posts.length > 0">
+    <button (click)="page = page - 1; loadPosts()" [disabled]="page <= 1"
+            class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition">
+      ← Previous
+    </button>
+    <span class="text-gray-600 dark:text-gray-300 font-medium">Page {{ page }}</span>
+    <button (click)="page = page + 1; loadPosts()" [disabled]="posts.length < pageSize"
+            class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition">
+      Next →
+    </button>
+  </div>
+
+  <!-- No Posts Message -->
+  <div *ngIf="!loading && posts.length === 0" class="text-center py-12 text-gray-500 dark:text-gray-400">
+    <p class="text-lg">No posts found. Try searching or create a new post!</p>
+  </div>
+
+  <!-- Edit Modal -->
+  <div *ngIf="isEditModalOpen">
+    <!-- Overlay -->
+    <div (click)="closeEditModal()" class="fixed inset-0 z-40 bg-black/80"></div>
+
+    <!-- Modal Content -->
+    <div
+      role="dialog"
+      class="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 bg-background p-6 rounded-lg shadow-lg"
+    >
+      <!-- Header -->
+      <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+        <h2 class="font-semibold tracking-tight text-2xl">Edit Post</h2>
+      </div>
+
+      <!-- Form -->
+      <div class="space-y-5 py-4">
+        <!-- skills -->
+        <div class="space-y-2">
+          <label class="font-medium text-base">Skill</label>
+          <select
+            [(ngModel)]="editSkillId"
+            class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
+            <option [ngValue]="null">Select Skill</option>
+            <option *ngFor="let s of skills" [ngValue]="s.id">
+              {{ s.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Post Category -->
+        <div class="space-y-2">
+          <label for="edit-category" class="font-medium text-base">Select Category</label>
+          <select
+            [(ngModel)]="editCategoryId"
+            class="w-full border p-2 rounded-md"
+          >
+            <option [ngValue]="null">Select Category</option>
+            <option *ngFor="let c of categories" [ngValue]="c.id">
+              {{ c.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Post Content -->
+        <div class="space-y-2">
+          <label for="edit-content" class="font-medium text-base">Post Content</label>
+          <textarea
+            [(ngModel)]="editContent"
+            id="edit-content"
+            placeholder="Edit your post content here..."
+            rows="10"
+            class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          ></textarea>
+        </div>
+
+        <!-- Attach Media (لو محتاج، بس مش ضروري دلوقتي) -->
+        <!-- <div class="space-y-3">
+          <label class="font-medium text-base">Attach Media</label>
+          <div class="flex items-center gap-3">
+            <label for="edit-file-upload" class="cursor-pointer">
+              <div class="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border-2 border-dashed border-primary/30 hover:border-primary/50 hover:from-primary/20 hover:to-accent/20 transition-all shadow-sm hover:shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload w-5 h-5 text-primary">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" x2="12" y1="3" y2="15"></line>
+                </svg>
+                <span class="font-medium text-sm">Upload Files</span>
+              </div>
+              <input id="edit-file-upload" type="file" multiple accept="image/*,video/*,.pdf,.doc,.docx" class="hidden" />
+            </label>
+            <span class="text-xs text-muted-foreground">Images, Videos, PDF, Word</span>
+          </div>
+        </div> -->
+
+
+
+
+         <!-- Attach Media -->
+      <div class="space-y-3">
+        <label class="font-medium text-base">Attach Media</label>
+        <div class="flex items-center gap-3">
+          <label for="edit-file-upload" class="cursor-pointer">
+            <div class="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border-2 border-dashed border-primary/30 hover:border-primary/50 hover:from-primary/20 hover:to-accent/20 transition-all shadow-sm hover:shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload w-5 h-5 text-primary">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" x2="12" y1="3" y2="15"></line>
+              </svg>
+              <span class="font-medium text-sm">Upload Files</span>
+            </div>
+            <input id="edit-file-upload" type="file" multiple accept="image/*,video/*,.pdf,.doc,.docx" class="hidden" (change)="onEditFileChange($event)" />
+          </label>
+          <span class="text-xs text-muted-foreground">Images, Videos, PDF, Word</span>
+        </div>
+        <div *ngIf="editMedias.length > 0" class="text-sm text-muted-foreground">
+          Selected files: {{ editMedias.length }}
+        </div>
+      </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-3 justify-end pt-4">
+          <button (click)="closeEditModal()" class="inline-flex items-center justify-center gap-2 text-sm font-medium h-11 rounded-md px-8 border border-input bg-background hover:bg-accent hover:text-accent-foreground">Cancel</button>
+          <button (click)="saveEdit()" class="inline-flex items-center justify-center gap-2 text-sm font-medium h-11 rounded-md px-8 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg">Save Changes</button>
+        </div>
+      </div>
+
+      <!-- Close Button -->
+      <button (click)="closeEditModal()" type="button" class="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+        <span class="sr-only">Close</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

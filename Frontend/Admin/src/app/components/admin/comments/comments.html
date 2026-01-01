@@ -1,0 +1,102 @@
+<section class="flex w-full min-h-screen bg-gray-50 dark:bg-gray-900 ">
+  <div [ngClass]="{
+        'fixed inset-0 z-50 transform transition-transform duration-300': isMobile(),
+        '-translate-x-full': isMobile() && !isSidebarOpen,
+
+        'w-7': !isSidebarOpen && !isMobile(),
+        'w-60': isSidebarOpen || isMobile()
+      }" class="bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 flex-shrink-0">
+    <app-sidebar [collapsed]="!isSidebarOpen"></app-sidebar>
+  </div>
+
+  <div *ngIf="isSidebarOpen && isMobile()" class="fixed inset-0 bg-black/40 z-40" (click)="toggleSidebar()"></div>
+
+  <main [ngClass]="{
+      'ml-0 w-full': isMobile(),
+      'ml-9 w-[calc(100%-2rem)]': !isSidebarOpen && !isMobile(),   
+      'ml-5 w-[calc(100%-14rem)]': isSidebarOpen && !isMobile()   
+    }" class="flex flex-col transition-all duration-300  overflow-auto">
+
+    <app-admin-header [isDarkMode]="isDarkMode" (toggleSidebarEvent)="toggleSidebar()"
+      (toggleDarkModeEvent)="toggleDarkMode()">
+    </app-admin-header>
+
+
+    <div class="pr-3 pl-3 mt-4">
+
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">{{tr('Comments')}}</h2>
+
+      <!-- Search Bar -->
+      <div class="flex gap-3 mb-4">
+        <input type="text" [(ngModel)]="search" (keyup.enter)="onSearch()"
+          placeholder="Search by content, user or post..."
+          class="input w-full rounded-md border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500" />
+        <button class="btn bg-indigo-600 text-white px-4 rounded-md" (click)="onSearch()">
+         {{tr(' Search')}}
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="loading" class="text-center py-10 text-gray-500">
+       {{(' Loading...')}}
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="error" class="text-red-600 font-medium text-center mb-4">
+        {{ error }}
+      </div>
+
+      <!-- No Data -->
+      <div *ngIf="!loading && filtered.length === 0" class="text-center text-gray-400 py-10">
+        {{tr('No comments found.')}}
+      </div>
+
+      <!-- Comments Table -->
+      <div *ngIf="filtered.length > 0" class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg mt-4">
+        <table class="w-full text-left min-w-[400px]">
+          <thead class="bg-gray-100 dark:bg-gray-700">
+            <tr>
+              <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('ID')}}</th>
+              <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('User')}}</th>
+              <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('Post')}}</th>
+              <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('Content')}}</th>
+              <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('Created')}}</th>
+              <th class="px-4 py-3 text-gray-900 dark:text-gray-100">{{tr('Actions')}}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let c of paginated"  class="border-b hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+              <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{{ c.commentId }}</td>
+              <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{{ c.userName || 'Unknown' }}</td>
+              <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">Post #{{ c.postId }}</td>
+              <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{{ c.commentText }}</td>
+              <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{{ c.createdAt | date:'short' }}</td>
+              <td class="px-4 py-3">
+                <button class="p-2 bg-red-100 dark:bg-red-700 text-red-600 dark:text-red-200 rounded hover:bg-red-200 dark:hover:bg-red-600 transition"
+                  (click)="deleteComment(c.commentId)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="filtered.length > pageSize" class="flex justify-between items-center mt-6">
+        <button class="btn px-4 py-2 bg-gray-200 rounded-md" [disabled]="page === 1" (click)="page = page - 1">
+          {{tr('Previous')}}
+        </button>
+
+        <span class="text-gray-700 font-medium">{{tr('Page')}} {{ page }}</span>
+
+        <button class="btn px-4 py-2 bg-gray-200 rounded-md" [disabled]="page * pageSize >= filtered.length"
+          (click)="page = page + 1">
+          {{tr('Next')}}
+        </button>
+      </div>
+
+    </div>
+  </main>
+</section>

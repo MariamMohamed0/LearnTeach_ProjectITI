@@ -1,0 +1,17 @@
+
+<div *ngIf="loading">Loading users...</div>
+
+<ul *ngIf="!loading">
+   <div *ngFor="let user of users">
+  <a [routerLink]="['/user', user.userId]">{{ user.fname }} {{ user.lname }}</a>
+</div>
+
+</ul>
+
+<p>home-component works!</p>
+
+<div class="user-dashboard">
+    <h1>Welcome, {{ authService.currentUser?.name }}</h1>
+    <!-- <UserReportsComponent [userId]="authService.currentUser.userId"></UserReportsComponent> -->
+  </div>
+
